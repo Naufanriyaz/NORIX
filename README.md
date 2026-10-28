@@ -11,3 +11,6 @@ A gaming accessories e-commerce project.
 - MongoDB
 - EJS
 - Git and GitHub
+## Project Status
+
+Development setup started.
