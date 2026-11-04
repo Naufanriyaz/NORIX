@@ -1,0 +1,55 @@
+
+<header class="site-header">
+  <div class="header-container">
+
+    <a href="/" class="brand">
+      NORIX<span>.</span>
+    </a>
+
+    <nav class="main-nav">
+      <a href="/" class="<%= currentPage === 'home' ? 'active' : '' %>">HOME</a>
+      <a href="/products" class="<%= currentPage === 'shop' ? 'active' : '' %>">SHOP</a>
+      <a href="/categories" class="<%= currentPage === 'categories' ? 'active' : '' %>">CATEGORIES</a>
+      <a href="/deals" class="<%= currentPage === 'deals' ? 'active' : '' %>">DEALS</a>
+    </nav>
+
+    <form action="/products/search" method="GET" class="header-search">
+      <span class="search-icon">⌕</span>
+      <input
+        type="search"
+        name="q"
+        placeholder="Search for gaming gear, mice, keyboards..."
+        value="<%= typeof q !== 'undefined' ? q : '' %>"
+      >
+    </form>
+
+    <div class="header-actions">
+
+      <% if (typeof user !== 'undefined' && user) { %>
+
+        <a href="/wishlist" class="header-icon" aria-label="Wishlist">
+          ♡
+          <span class="action-count"><%= wishlistCount || 0 %></span>
+        </a>
+
+        <a href="/cart" class="header-icon" aria-label="Cart">
+          ▢
+          <span class="action-count"><%= cartCount || 0 %></span>
+        </a>
+
+        <a href="/profile" class="profile-avatar">
+          N
+        </a>
+
+      <% } else { %>
+
+        <a href="/login" class="login-link">LOGIN</a>
+
+        <a href="/signup" class="signup-button">SIGN UP</a>
+
+      <% } %>
+
+    </div>
+
+  </div>
+</header>

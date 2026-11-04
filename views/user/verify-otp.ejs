@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Email | NORIX</title>
+  <link rel="stylesheet" href="/css/norix.css">
+
+  <style>
+  .otp-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .otp-popup-content {
+    background: #fff;
+    color: #222;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 350px;
+    text-align: center;
+  }
+
+  .otp-popup-content button {
+    padding: 10px 25px;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+
+  <div id="otpPopup" class="otp-popup" style="display: none;">
+  <div class="otp-popup-content">
+    <h3 id="popupTitle">Verification</h3>
+    <p id="popupMessage"></p>
+    <button type="button" id="popupClose">OK</button>
+  </div>
+</div>
+
+
+  <main>
+    <h1>Verify Your Email</h1>
+
+    <p>We've sent a verification code to <%= email %>
+    </p>
+
+    <form action="/verify-otp" method="POST">
+      <input type="hidden" name="email" value="<%= email %>">
+
+      <label for="otp">Enter your 6-digit OTP</label>
+
+      <input type="text" id="otp" name="otp" maxlength="6" minlength="6" pattern="[0-9]{6}" inputmode="numeric"
+        autocomplete="one-time-code" required>
+
+      <button type="submit">Verify OTP</button>
+    </form>
+
+    <p>OTP expires in: <strong id="timer">05:00</strong></p>
+
+    <form action="/resend-otp" method="POST">
+      <input type="hidden" name="email" value="<%= email %>">
+
+      <button type="submit" id="resendBtn" disabled>
+        Resend OTP
+      </button>
+    </form>
+  </main>
+
+  <script>
+    const expiryTime = new Date('<%= otpExpiry.toISOString() %>').getTime();
+
+    const timerDisplay = document.getElementById('timer');
+    const resendBtn = document.getElementById('resendBtn');
+    const otpInput = document.getElementById('otp');
+    const verifyBtn = document.querySelector(
+      'form[action="/verify-otp"] button[type="submit"]'
+    );
+
+   function lockOTPForm() {
+  otpInput.disabled = true;
+  verifyBtn.disabled = true;
+  resendBtn.disabled = false;
+
+  clearInterval(countdown);
+
+  timerDisplay.textContent = 'Attempts exceeded';
+}
+
+    function updateTimer() {
+      const remaining = Math.max(0, expiryTime - Date.now());
+
+      const minutes = Math.floor(remaining / 60000);
+      const seconds = Math.floor((remaining % 60000) / 1000);
+
+      timerDisplay.textContent =
+        String(minutes).padStart(2, '0') + ':' +
+        String(seconds).padStart(2, '0');
+
+      if (remaining <= 0) {
+        clearInterval(countdown);
+        timerDisplay.textContent = 'Expired';
+        resendBtn.disabled = false;
+      }
+    }
+
+    updateTimer();
+
+    const countdown = setInterval(updateTimer, 1000);
+
+    const popup = document.getElementById('otpPopup');
+const popupTitle = document.getElementById('popupTitle');
+const popupMessage = document.getElementById('popupMessage');
+const popupClose = document.getElementById('popupClose');
+
+const status = '<%= status || "" %>';
+const otpLocked = <%= otpLocked ? "true" : "false" %>;
+
+const messages = {
+  invalid: {
+    title: 'Invalid OTP',
+    message: 'The OTP you entered is incorrect. Please try again.'
+  },
+  locked: {
+    title: 'Too Many Attempts',
+    message: 'You have reached the maximum attempts. Please request a new OTP.'
+  },
+  expired: {
+    title: 'OTP Expired',
+    message: 'Your OTP has expired. Please request a new one.'
+  },
+  missing: {
+    title: 'Missing Information',
+    message: 'Please enter your OTP.'
+  },
+  notfound: {
+    title: 'Verification Not Found',
+    message: 'Your signup request was not found. Please sign up again.'
+  }
+};
+
+if (messages[status]) {
+  popupTitle.textContent = messages[status].title;
+  popupMessage.textContent = messages[status].message;
+  popup.style.display = 'flex';
+}
+
+popupClose.addEventListener('click', () => {
+  popup.style.display = 'none';
+});
+
+if (otpLocked) {
+  lockOTPForm();
+}
+  </script>
+
+</body>
+
+</html>

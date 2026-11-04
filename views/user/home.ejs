@@ -1,0 +1,263 @@
+
+<%- include('../partials/head', { title: 'NORIX | Gaming Store' }) %>
+<%- include('../partials/header', { currentPage: 'home' }) %>
+
+<main class="home-page">
+
+  <!-- HERO SECTION -->
+  <section class="home-hero">
+
+    <div class="hero-content">
+      <span class="hero-label">● LEVEL UP YOUR GAMING EXPERIENCE</span>
+
+      <h1>
+        YOUR GAME.
+        <span>YOUR RULES.</span>
+      </h1>
+
+      <p>
+        Precision-built gaming gear for your next victory.
+        Discover your setup and own your arena.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="/products" class="hero-primary-btn">
+          SHOP GAMING GEAR <span>→</span>
+        </a>
+
+        <a href="/categories" class="hero-secondary-btn">
+          EXPLORE CATEGORIES <span>↗</span>
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <strong>0.12ms</strong>
+          <span>SUB-MS LATENCY</span>
+        </div>
+
+        <div>
+          <strong>8,000Hz</strong>
+          <span>HYPER-POLLING</span>
+        </div>
+
+        <div>
+          <strong>100%</strong>
+          <span>PRO TOURNAMENT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img
+        src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1200&q=85"
+        alt="Gaming setup with monitor and RGB lighting"
+      >
+      <span class="hero-image-tag">NORIX GAMING ARENA</span>
+    </div>
+
+  </section>
+
+
+  <!-- CATEGORY SECTION -->
+  <section class="home-section category-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="section-eyebrow">FIND YOUR EDGE</span>
+        <h2>Shop by Category</h2>
+        <p>Everything your setup needs, all in one place.</p>
+      </div>
+
+      <a href="/categories" class="section-link">VIEW ALL CATEGORIES ↗</a>
+    </div>
+
+    <div class="category-grid">
+
+      <a href="/categories/gaming-mice" class="category-card">
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=500&q=80" alt="Gaming mouse">
+        </div>
+        <div class="category-info">
+          <h3>Gaming Mice</h3>
+          <span>Precision control</span>
+        </div>
+        <span class="category-arrow">↗</span>
+      </a>
+
+      <a href="/categories/keyboards" class="category-card">
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=500&q=80" alt="Gaming keyboard">
+        </div>
+        <div class="category-info">
+          <h3>Gaming Keyboards</h3>
+          <span>Mechanical precision</span>
+        </div>
+        <span class="category-arrow">↗</span>
+      </a>
+
+      <a href="/categories/monitors" class="category-card">
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=500&q=80" alt="Gaming monitor">
+        </div>
+        <div class="category-info">
+          <h3>Gaming Monitors</h3>
+          <span>Fast and vivid displays</span>
+        </div>
+        <span class="category-arrow">↗</span>
+      </a>
+
+      <a href="/categories/gaming-laptops" class="category-card">
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=500&q=80" alt="Gaming laptop">
+        </div>
+        <div class="category-info">
+          <h3>Gaming Laptops</h3>
+          <span>Power on the move</span>
+        </div>
+        <span class="category-arrow">↗</span>
+      </a>
+
+      <a href="/categories/headsets" class="category-card">
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1599669454699-248893623440?auto=format&fit=crop&w=500&q=80" alt="Gaming headset">
+        </div>
+        <div class="category-info">
+          <h3>Gaming Headsets</h3>
+          <span>Immersive audio</span>
+        </div>
+        <span class="category-arrow">↗</span>
+      </a>
+
+      <a href="/categories/gaming-speakers" class="category-card">
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=500&q=80" alt="Gaming speakers">
+        </div>
+        <div class="category-info">
+          <h3>Gaming Speakers</h3>
+          <span>Powerful sound</span>
+        </div>
+        <span class="category-arrow">↗</span>
+      </a>
+
+      <a href="/categories/microphones" class="category-card">
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=500&q=80" alt="Gaming microphone">
+        </div>
+        <div class="category-info">
+          <h3>Gaming Microphones</h3>
+          <span>Clear communication</span>
+        </div>
+        <span class="category-arrow">↗</span>
+      </a>
+
+      <a href="/categories/controllers" class="category-card">
+        <div class="category-image">
+          <img src="https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=500&q=80" alt="Gaming controller">
+        </div>
+        <div class="category-info">
+          <h3>Gaming Controllers</h3>
+          <span>Take control</span>
+        </div>
+        <span class="category-arrow">↗</span>
+      </a>
+
+    </div>
+  </section>
+
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="home-section featured-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="section-eyebrow">COMMUNITY FAVOURITES</span>
+        <h2>Featured Products</h2>
+        <p>Top picks for players who want more from every session.</p>
+      </div>
+
+      <a href="/products" class="section-link">SHOP ALL PRODUCTS ↗</a>
+    </div>
+
+    <div class="product-grid">
+
+      <article class="home-product-card">
+        <div class="product-image">
+          <span class="product-badge">BESTSELLER</span>
+          <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=600&q=80" alt="Phantom X gaming mouse">
+          <button type="button" class="wishlist-btn" aria-label="Add to wishlist">♡</button>
+        </div>
+        <div class="product-info">
+          <span class="product-category">GAMING MICE</span>
+          <h3>Phantom X Wireless Gaming Mouse</h3>
+          <div class="product-rating">★★★★★ <span>(124 reviews)</span></div>
+          <div class="product-price">
+            <strong>₹3,999</strong>
+            <del>₹4,999</del>
+          </div>
+          <a href="/products" class="product-button">VIEW PRODUCT ↗</a>
+        </div>
+      </article>
+
+      <article class="home-product-card">
+        <div class="product-image">
+          <span class="product-badge">HOT</span>
+          <img src="https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=600&q=80" alt="Striker mechanical keyboard">
+          <button type="button" class="wishlist-btn" aria-label="Add to wishlist">♡</button>
+        </div>
+        <div class="product-info">
+          <span class="product-category">KEYBOARDS</span>
+          <h3>Striker TKL Mechanical Keyboard</h3>
+          <div class="product-rating">★★★★★ <span>(96 reviews)</span></div>
+          <div class="product-price">
+            <strong>₹5,999</strong>
+            <del>₹6,999</del>
+          </div>
+          <a href="/products" class="product-button">VIEW PRODUCT ↗</a>
+        </div>
+      </article>
+
+      <article class="home-product-card">
+        <div class="product-image">
+          <span class="product-badge">NEW</span>
+          <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80" alt="Velocity gaming monitor">
+          <button type="button" class="wishlist-btn" aria-label="Add to wishlist">♡</button>
+        </div>
+        <div class="product-info">
+          <span class="product-category">MONITORS</span>
+          <h3>Velocity 27 Gaming Monitor</h3>
+          <div class="product-rating">★★★★★ <span>(39 reviews)</span></div>
+          <div class="product-price">
+            <strong>₹24,999</strong>
+          </div>
+          <a href="/products" class="product-button">VIEW PRODUCT ↗</a>
+        </div>
+      </article>
+
+      <article class="home-product-card">
+        <div class="product-image">
+          <span class="product-badge">POPULAR</span>
+          <img src="https://images.unsplash.com/photo-1599669454699-248893623440?auto=format&fit=crop&w=600&q=80" alt="Echo Surround gaming headset">
+          <button type="button" class="wishlist-btn" aria-label="Add to wishlist">♡</button>
+        </div>
+        <div class="product-info">
+          <span class="product-category">HEADSETS</span>
+          <h3>Echo Surround Gaming Headset</h3>
+          <div class="product-rating">★★★★★ <span>(72 reviews)</span></div>
+          <div class="product-price">
+            <strong>₹4,999</strong>
+            <del>₹5,999</del>
+          </div>
+          <a href="/products" class="product-button">VIEW PRODUCT ↗</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+</main>
+
+<%- include('../partials/footer') %>
+
+</body>
+</html>

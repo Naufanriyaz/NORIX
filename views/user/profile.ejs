@@ -1,0 +1,232 @@
+
+<%- include('../partials/head', { title: 'NORIX | My Profile' }) %>
+<%- include('../partials/header', { currentPage: 'profile' }) %>
+
+<main class="profile-page">
+
+  <!-- PAGE HEADING -->
+  <section class="profile-heading">
+    <div class="profile-breadcrumb">
+      <a href="/">HOME</a> / MY ACCOUNT
+    </div>
+    <h1>MY ACCOUNT</h1>
+    <p>Manage your personal details and saved addresses.</p>
+  </section>
+
+  <div class="profile-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="profile-sidebar">
+
+      <div class="profile-user-card">
+        <div class="profile-avatar">MV</div>
+        <h3>Marcus Vance</h3>
+        <p>marcus.vance@esports.com</p>
+        <span>MEMBER SINCE 2026</span>
+      </div>
+
+      <nav class="account-nav">
+        <a href="/profile" class="active">
+          <span>♙</span> My Profile
+        </a>
+
+        <a href="/orders">
+          <span>▤</span> My Orders
+        </a>
+
+        <a href="/addresses">
+          <span>⌖</span> Saved Addresses
+        </a>
+
+        <a href="/wishlist">
+          <span>♡</span> Wishlist
+          <small>0</small>
+        </a>
+
+        <a href="/wallet">
+          <span>▣</span> My Wallet
+        </a>
+
+        <a href="/coupons">
+          <span>％</span> My Coupons
+        </a>
+
+        <a href="/referral">
+          <span>♧</span> Refer & Earn
+        </a>
+
+        <form action="/logout" method="POST">
+          <button type="submit" class="profile-logout">
+            <span>⇥</span> Logout
+          </button>
+        </form>
+      </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="profile-content">
+
+      <!-- PERSONAL INFORMATION -->
+      <section class="profile-panel">
+
+        <div class="profile-panel-heading">
+          <div>
+            <span class="panel-icon">♙</span>
+            <div>
+              <h2>PERSONAL INFORMATION</h2>
+              <p>Update your personal details and account information.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="personal-info-grid">
+
+          <div class="info-item">
+            <span>FULL NAME</span>
+            <strong>Marcus Vance</strong>
+          </div>
+
+          <div class="info-item">
+            <span>EMAIL ADDRESS</span>
+            <strong>marcus.vance@esports.com</strong>
+          </div>
+
+          <div class="info-item">
+            <span>PHONE NUMBER</span>
+            <strong>+91 98765 43210</strong>
+          </div>
+
+        </div>
+
+        <div class="profile-actions">
+          <a href="/profile/edit" class="profile-edit-btn">
+            ✎ EDIT PROFILE
+          </a>
+
+          <a href="/change-password" class="profile-password-btn">
+            ▤ CHANGE PASSWORD
+          </a>
+        </div>
+
+      </section>
+
+
+      <!-- RECENT ORDERS -->
+      <section class="profile-panel">
+
+        <div class="profile-panel-heading order-heading">
+          <div>
+            <span class="panel-icon">▤</span>
+            <div>
+              <h2>RECENT ORDERS</h2>
+              <p>View your order status, collection records, and return requests.</p>
+            </div>
+          </div>
+
+          <a href="/orders" class="profile-view-link">
+            VIEW ALL ORDERS ↗
+          </a>
+        </div>
+
+        <div class="profile-empty-state">
+          <p>Your recent orders will appear here.</p>
+          <a href="/products">START SHOPPING →</a>
+        </div>
+
+      </section>
+
+
+      <!-- SAVED ADDRESSES -->
+      <section class="profile-panel">
+
+        <div class="profile-panel-heading">
+          <div>
+            <span class="panel-icon">⌖</span>
+            <div>
+              <h2>SAVED ADDRESSES</h2>
+              <p>Manage your default shipping and delivery destinations.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="saved-address-grid">
+
+          <article class="saved-address-card">
+
+            <span class="address-type">HOME · DEFAULT</span>
+
+            <h3>Marcus Vance</h3>
+
+            <p>+91 98765 43210</p>
+
+            <p class="address-details">
+              Flat 402, Apex Tower, B City,
+              Near Esports Arena, Indiranagar,
+              100 Feet Road, Bengaluru,
+              Karnataka – 560038, India.
+            </p>
+
+            <a href="/addresses" class="address-edit-btn">
+              ✎ EDIT ADDRESS
+            </a>
+
+          </article>
+
+          <a href="/addresses/new" class="add-address-card">
+            <span class="add-address-icon">＋</span>
+            <strong>ADD NEW ADDRESS</strong>
+            <small>Add a new delivery address</small>
+          </a>
+
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+
+
+  <!-- BENEFITS STRIP -->
+  <section class="profile-benefits">
+
+    <div>
+      <span>◉</span>
+      <div>
+        <strong>Zero-Latency Polling</strong>
+        <small>8,000Hz tournament-grade</small>
+      </div>
+    </div>
+
+    <div>
+      <span>▣</span>
+      <div>
+        <strong>Free Express Delivery</strong>
+        <small>Fast delivery on eligible orders</small>
+      </div>
+    </div>
+
+    <div>
+      <span>♢</span>
+      <div>
+        <strong>2-Year NORIX Care</strong>
+        <small>Hardware replacement protection</small>
+      </div>
+    </div>
+
+    <div>
+      <span>♙</span>
+      <div>
+        <strong>Secure Payments</strong>
+        <small>UPI, Credit Cards, Netbanking & more</small>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<%- include('../partials/footer') %>
+</body>
+</html>
