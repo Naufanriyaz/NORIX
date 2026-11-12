@@ -19,13 +19,30 @@
     <aside class="profile-sidebar">
 
       <div class="profile-user-card">
-        <div class="profile-avatar">MV</div>
-        <h3>Marcus Vance</h3>
-        <p>marcus.vance@esports.com</p>
-        <span>MEMBER SINCE 2026</span>
+
+        <% if (user.profileImage) { %>
+          <img
+            src="<%= user.profileImage %>"
+            alt="Profile picture"
+            class="profile-avatar"
+          >
+        <% } else { %>
+          <div class="profile-avatar">
+            <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+          </div>
+        <% } %>
+
+        <h3><%= user.name %></h3>
+        <p><%= user.email %></p>
+
+        <span>
+          MEMBER SINCE <%= new Date(user.createdAt).getFullYear() %>
+        </span>
+
       </div>
 
       <nav class="account-nav">
+
         <a href="/profile" class="active">
           <span>♙</span> My Profile
         </a>
@@ -55,15 +72,15 @@
           <span>♧</span> Refer & Earn
         </a>
 
-        <form action="/logout" method="POST">
+        <form action="/logout" method="POST" novalidate>
           <button type="submit" class="profile-logout">
             <span>⇥</span> Logout
           </button>
         </form>
+
       </nav>
 
     </aside>
-
 
     <!-- MAIN CONTENT -->
     <div class="profile-content">
@@ -85,22 +102,23 @@
 
           <div class="info-item">
             <span>FULL NAME</span>
-            <strong>Marcus Vance</strong>
+            <strong><%= user.name %></strong>
           </div>
 
           <div class="info-item">
             <span>EMAIL ADDRESS</span>
-            <strong>marcus.vance@esports.com</strong>
+            <strong><%= user.email %></strong>
           </div>
 
           <div class="info-item">
             <span>PHONE NUMBER</span>
-            <strong>+91 98765 43210</strong>
+            <strong><%= user.phone || 'Not added' %></strong>
           </div>
 
         </div>
 
         <div class="profile-actions">
+
           <a href="/profile/edit" class="profile-edit-btn">
             ✎ EDIT PROFILE
           </a>
@@ -108,10 +126,10 @@
           <a href="/change-password" class="profile-password-btn">
             ▤ CHANGE PASSWORD
           </a>
+
         </div>
 
       </section>
-
 
       <!-- RECENT ORDERS -->
       <section class="profile-panel">
@@ -137,7 +155,6 @@
 
       </section>
 
-
       <!-- SAVED ADDRESSES -->
       <section class="profile-panel">
 
@@ -153,40 +170,21 @@
 
         <div class="saved-address-grid">
 
-          <article class="saved-address-card">
+          <div class="profile-empty-state">
+            <p>You haven't added any delivery addresses yet.</p>
 
-            <span class="address-type">HOME · DEFAULT</span>
-
-            <h3>Marcus Vance</h3>
-
-            <p>+91 98765 43210</p>
-
-            <p class="address-details">
-              Flat 402, Apex Tower, B City,
-              Near Esports Arena, Indiranagar,
-              100 Feet Road, Bengaluru,
-              Karnataka – 560038, India.
-            </p>
-
-            <a href="/addresses" class="address-edit-btn">
-              ✎ EDIT ADDRESS
+            <a href="/addresses/new">
+              ADD YOUR FIRST ADDRESS →
             </a>
-
-          </article>
-
-          <a href="/addresses/new" class="add-address-card">
-            <span class="add-address-icon">＋</span>
-            <strong>ADD NEW ADDRESS</strong>
-            <small>Add a new delivery address</small>
-          </a>
+          </div>
 
         </div>
 
       </section>
 
     </div>
-  </div>
 
+  </div>
 
   <!-- BENEFITS STRIP -->
   <section class="profile-benefits">
@@ -226,6 +224,144 @@
   </section>
 
 </main>
+
+<!-- CUSTOM NORIX POPUP -->
+<div
+  class="edit-popup-overlay"
+  id="editPopup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="editPopupTitle"
+  style="display: none;"
+>
+
+  <div class="edit-popup">
+
+    <div class="edit-popup-icon">!</div>
+
+    <h3 id="editPopupTitle">Upload Error</h3>
+
+    <p id="editPopupMessage"></p>
+
+    <button type="button" id="editPopupClose">
+      OK
+    </button>
+
+  </div>
+
+</div>
+
+<style>
+  /* CUSTOM POPUP */
+
+  .edit-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .edit-popup {
+    background: #fff;
+    width: 100%;
+    max-width: 380px;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .edit-popup-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #fff0f0;
+    color: #d62828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 auto 15px;
+  }
+
+  .edit-popup h3 {
+    margin-bottom: 10px;
+  }
+
+  .edit-popup p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .edit-popup button {
+    margin-top: 20px;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  // CUSTOM POPUP ELEMENTS
+  const editPopup = document.getElementById('editPopup');
+  const popupTitle = document.getElementById('editPopupTitle');
+  const popupMessage = document.getElementById('editPopupMessage');
+  const popupClose = document.getElementById('editPopupClose');
+
+  // SHOW POPUP
+  function showPopup(title, message) {
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    editPopup.style.display = 'flex';
+    popupClose.focus();
+  }
+
+  // CLOSE POPUP
+  function closePopup() {
+    editPopup.style.display = 'none';
+
+    // Remove uploadError from URL
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+  }
+
+  popupClose.addEventListener('click', closePopup);
+
+  // CLOSE WHEN CLICKING OUTSIDE
+  editPopup.addEventListener('click', (event) => {
+    if (event.target === editPopup) {
+      closePopup();
+    }
+  });
+
+  // CLOSE WITH ESCAPE KEY
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && editPopup.style.display === 'flex') {
+      closePopup();
+    }
+  });
+
+  // BACKEND UPLOAD ERROR
+  const uploadError = <%- JSON.stringify(
+    typeof uploadError !== 'undefined' ? uploadError : null
+  ).replace(/</g, '\\u003c') %>;
+
+  if (uploadError) {
+    showPopup('Profile Upload Error', uploadError);
+  }
+</script>
 
 <%- include('../partials/footer') %>
 </body>

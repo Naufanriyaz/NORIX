@@ -1,0 +1,584 @@
+
+<%- include('../partials/head', { title: 'NORIX | Add Address' }) %>
+<%- include('../partials/header', { currentPage: 'profile' }) %>
+
+<main class="edit-profile-page">
+
+  <!-- PAGE HEADING -->
+  <section class="profile-heading">
+    <div class="profile-breadcrumb">
+      <a href="/">HOME</a> /
+      <a href="/profile">MY ACCOUNT</a> /
+      <a href="/addresses">SAVED ADDRESSES</a> /
+      ADD ADDRESS
+    </div>
+
+    <h1>ADD NEW ADDRESS</h1>
+    <p>Add your delivery details for a smooth shopping experience.</p>
+  </section>
+
+  <div class="edit-profile-container">
+
+    <section class="edit-profile-card">
+
+      <!-- FORM HEADING -->
+      <div class="edit-profile-heading">
+        <div>
+          <span class="panel-icon">⌖</span>
+          <h2>DELIVERY INFORMATION</h2>
+          <p>Enter your complete delivery address.</p>
+        </div>
+      </div>
+
+      <form
+        action="/addresses"
+        method="POST"
+        id="addressForm"
+        novalidate
+      >
+
+        <!-- FULL NAME -->
+        <div class="edit-form-group">
+          <label for="fullName">FULL NAME *</label>
+
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="Enter receiver's full name"
+            autocomplete="name"
+          >
+
+          <small class="field-error" id="fullNameError"></small>
+        </div>
+
+        <!-- PHONE -->
+        <div class="edit-form-group">
+          <label for="phone">PHONE NUMBER *</label>
+
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="Enter 10-digit mobile number"
+            maxlength="10"
+            autocomplete="tel"
+          >
+
+          <small class="field-error" id="phoneError"></small>
+        </div>
+
+        <!-- HOUSE -->
+        <div class="edit-form-group">
+          <label for="house">HOUSE / BUILDING *</label>
+
+          <input
+            type="text"
+            id="house"
+            name="house"
+            placeholder="House number or building name"
+          >
+
+          <small class="field-error" id="houseError"></small>
+        </div>
+
+        <!-- STREET -->
+        <div class="edit-form-group">
+          <label for="street">STREET / AREA *</label>
+
+          <input
+            type="text"
+            id="street"
+            name="street"
+            placeholder="Enter street or area"
+          >
+
+          <small class="field-error" id="streetError"></small>
+        </div>
+
+        <!-- CITY AND STATE -->
+        <div class="address-form-grid">
+
+          <div class="edit-form-group">
+            <label for="city">CITY *</label>
+
+            <input
+              type="text"
+              id="city"
+              name="city"
+              placeholder="Enter city"
+            >
+
+            <small class="field-error" id="cityError"></small>
+          </div>
+
+          <div class="edit-form-group">
+            <label for="state">STATE *</label>
+
+            <input
+              type="text"
+              id="state"
+              name="state"
+              placeholder="Enter state"
+            >
+
+            <small class="field-error" id="stateError"></small>
+          </div>
+
+        </div>
+
+        <!-- PINCODE AND LANDMARK -->
+        <div class="address-form-grid">
+
+          <div class="edit-form-group">
+            <label for="pincode">PIN CODE *</label>
+
+            <input
+              type="text"
+              id="pincode"
+              name="pincode"
+              placeholder="6-digit PIN code"
+              maxlength="6"
+              inputmode="numeric"
+            >
+
+            <small class="field-error" id="pincodeError"></small>
+          </div>
+
+          <div class="edit-form-group">
+            <label for="landmark">LANDMARK</label>
+
+            <input
+              type="text"
+              id="landmark"
+              name="landmark"
+              placeholder="Nearby landmark (optional)"
+            >
+          </div>
+
+        </div>
+
+        <!-- ADDRESS TYPE -->
+        <div class="edit-form-group">
+
+          <label>ADDRESS TYPE *</label>
+
+          <div class="address-type-options">
+
+            <label class="address-type-option">
+              <input
+                type="radio"
+                name="addressType"
+                value="Home"
+                checked
+              >
+              <span>⌂ HOME</span>
+            </label>
+
+            <label class="address-type-option">
+              <input
+                type="radio"
+                name="addressType"
+                value="Work"
+              >
+              <span>▣ WORK</span>
+            </label>
+
+            <label class="address-type-option">
+              <input
+                type="radio"
+                name="addressType"
+                value="Other"
+              >
+              <span>⌖ OTHER</span>
+            </label>
+
+          </div>
+
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="edit-profile-actions">
+
+          <a href="/addresses" class="edit-cancel-btn">
+            CANCEL
+          </a>
+
+          <button type="submit" class="edit-save-btn">
+            SAVE ADDRESS →
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </div>
+
+</main>
+
+<!-- CUSTOM NORIX POPUP -->
+<div
+  class="edit-popup-overlay"
+  id="editPopup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="editPopupTitle"
+  style="display: none;"
+>
+  <div class="edit-popup">
+
+    <div class="edit-popup-icon">!</div>
+
+    <h3 id="editPopupTitle">Validation Error</h3>
+
+    <p id="editPopupMessage"></p>
+
+    <button type="button" id="editPopupClose">
+      OK
+    </button>
+
+  </div>
+</div>
+
+<style>
+
+  .edit-profile-container {
+    max-width: 850px;
+    margin: 40px auto 70px;
+    padding: 0 20px;
+  }
+
+  .edit-profile-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    padding: 35px;
+    border-radius: 10px;
+  }
+
+  .edit-profile-heading {
+    margin-bottom: 30px;
+  }
+
+  .edit-profile-heading h2 {
+    display: inline-block;
+    font-size: 19px;
+    margin-left: 10px;
+  }
+
+  .edit-profile-heading p {
+    color: #777;
+    margin-top: 8px;
+  }
+
+  .edit-form-group {
+    margin-bottom: 25px;
+  }
+
+  .edit-form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .edit-form-group input:not([type="radio"]) {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .edit-form-group input:focus {
+    border-color: #222;
+  }
+
+  .address-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .field-error {
+    display: block;
+    color: #d62828;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+
+  .address-type-options {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .address-type-option {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .address-type-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .address-type-option span {
+    display: inline-block;
+    padding: 13px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .address-type-option input:checked + span {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+  }
+
+  .address-type-option input:focus-visible + span {
+    outline: 2px solid #555;
+    outline-offset: 3px;
+  }
+
+  .edit-profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 35px;
+  }
+
+  .edit-cancel-btn,
+  .edit-save-btn {
+    padding: 14px 22px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+  }
+
+  .edit-cancel-btn {
+    color: #222;
+    background: #eee;
+  }
+
+  .edit-save-btn {
+    color: #fff;
+    background: #222;
+  }
+
+  .edit-save-btn:hover {
+    background: #444;
+  }
+
+  /* CUSTOM POPUP */
+
+  .edit-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .edit-popup {
+    background: #fff;
+    width: 100%;
+    max-width: 380px;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .edit-popup-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #fff0f0;
+    color: #d62828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 auto 15px;
+  }
+
+  .edit-popup h3 {
+    margin-bottom: 10px;
+  }
+
+  .edit-popup p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .edit-popup button {
+    margin-top: 20px;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .edit-profile-card {
+      padding: 22px;
+    }
+
+    .address-form-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .edit-profile-actions {
+      flex-direction: column;
+    }
+
+    .edit-profile-actions a,
+    .edit-profile-actions button {
+      text-align: center;
+    }
+  }
+
+</style>
+
+<script>
+
+  // CUSTOM POPUP
+  const editPopup = document.getElementById('editPopup');
+  const popupTitle = document.getElementById('editPopupTitle');
+  const popupMessage = document.getElementById('editPopupMessage');
+  const popupClose = document.getElementById('editPopupClose');
+
+  function showPopup(title, message) {
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    editPopup.style.display = 'flex';
+    popupClose.focus();
+  }
+
+  function closePopup() {
+    editPopup.style.display = 'none';
+  }
+
+  popupClose.addEventListener('click', closePopup);
+
+  editPopup.addEventListener('click', (event) => {
+    if (event.target === editPopup) {
+      closePopup();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closePopup();
+    }
+  });
+
+  // ADDRESS FORM VALIDATION
+  const addressForm = document.getElementById('addressForm');
+
+  const fields = {
+    fullName: {
+      element: document.getElementById('fullName'),
+      error: document.getElementById('fullNameError')
+    },
+    phone: {
+      element: document.getElementById('phone'),
+      error: document.getElementById('phoneError')
+    },
+    house: {
+      element: document.getElementById('house'),
+      error: document.getElementById('houseError')
+    },
+    street: {
+      element: document.getElementById('street'),
+      error: document.getElementById('streetError')
+    },
+    city: {
+      element: document.getElementById('city'),
+      error: document.getElementById('cityError')
+    },
+    state: {
+      element: document.getElementById('state'),
+      error: document.getElementById('stateError')
+    },
+    pincode: {
+      element: document.getElementById('pincode'),
+      error: document.getElementById('pincodeError')
+    }
+  };
+
+  addressForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    Object.values(fields).forEach((field) => {
+      field.error.textContent = '';
+    });
+
+    const values = {};
+
+    Object.keys(fields).forEach((key) => {
+      values[key] = fields[key].element.value.trim();
+    });
+
+    // Required field validation
+    for (const [key, field] of Object.entries(fields)) {
+      if (!values[key]) {
+        field.error.textContent = 'This field is required.';
+        showPopup('Missing Information', 'Please complete all required fields.');
+        field.element.focus();
+        return;
+      }
+    }
+
+    // Name validation
+    if (!/^[A-Za-z ]{3,}$/.test(values.fullName)) {
+      fields.fullName.error.textContent = 'Enter a valid name.';
+      showPopup('Invalid Name', 'Please enter a valid full name.');
+      fields.fullName.element.focus();
+      return;
+    }
+
+    // Phone validation
+    if (!/^[6-9]\d{9}$/.test(values.phone)) {
+      fields.phone.error.textContent = 'Enter a valid 10-digit mobile number.';
+      showPopup('Invalid Phone', 'Please enter a valid 10-digit Indian mobile number.');
+      fields.phone.element.focus();
+      return;
+    }
+
+    // PIN code validation
+    if (!/^[1-9]\d{5}$/.test(values.pincode)) {
+      fields.pincode.error.textContent = 'Enter a valid 6-digit PIN code.';
+      showPopup('Invalid PIN Code', 'Please enter a valid 6-digit Indian PIN code.');
+      fields.pincode.element.focus();
+      return;
+    }
+
+    // Submit valid form
+    addressForm.submit();
+  });
+
+</script>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

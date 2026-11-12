@@ -1,202 +1,205 @@
-
 <%- include('../partials/head', { title: 'Create Account | NORIX' }) %>
 
-<main class="signup-page">
+  <main class="signup-page">
 
-  <!-- Top bar -->
-  <header class="signup-header">
-    <a href="/" class="auth-logo">NORIX<span>.</span></a>
-    <span class="hardware-label">● Esports Grade Hardware</span>
-    <a href="/" class="return-store">Return to Store</a>
-  </header>
+    <!-- Top bar -->
+    <header class="signup-header">
+      <a href="/" class="auth-logo">NORIX<span>.</span></a>
+      <span class="hardware-label">● Esports Grade Hardware</span>
+      <a href="/" class="return-store">Return to Store</a>
+    </header>
 
-  <section class="signup-card">
+    <section class="signup-card">
 
-    <!-- Left promotional panel -->
-    <div class="signup-promo">
+      <!-- Left promotional panel -->
+      <div class="signup-promo">
 
-      <div class="signup-promo-top">
-        <span class="arena-label">● NORIX ARENA ACCESS</span>
-        <span class="series-label">PRO SERIES 2026</span>
-      </div>
-
-      <div class="signup-promo-content">
-        <span class="member-label">OFFICIAL MEMBERSHIP</span>
-
-        <h1>
-          JOIN THE
-          <span>NORIX ARENA.</span>
-        </h1>
-
-        <p>
-          Create your account and gear up for your next victory.
-          Unlock tournament telemetry, member-only drops,
-          and zero-latency hardware orders.
-        </p>
-
-        <ul>
-          <li>Exclusive priority dispatch across India on all 90 catalog items</li>
-          <li>2-Year Instant NORIX Care hardware replacement coverage</li>
-          <li>Sync configurations, firmware updates and telemetry tracking</li>
-        </ul>
-      </div>
-
-      <div class="signup-promo-bottom">
-        <span>256-Bit SSL Encrypted</span>
-        <span>Trusted by 45,000+ Gamers</span>
-      </div>
-
-    </div>
-
-    <!-- Right signup form -->
-    <div class="signup-form-panel">
-
-      <div class="signup-form-container">
-
-        <div class="signup-form-top">
-          <a href="/" class="auth-logo">NORIX<span>.</span></a>
-          <span class="step-label">STEP 1 OF 2</span>
+        <div class="signup-promo-top">
+          <span class="arena-label">● NORIX ARENA ACCESS</span>
+          <span class="series-label">PRO SERIES 2026</span>
         </div>
 
-        <div class="signup-heading">
-          <h2>Create Account</h2>
-          <p>Join NORIX and find your next-level gaming gear.</p>
+        <div class="signup-promo-content">
+          <span class="member-label">OFFICIAL MEMBERSHIP</span>
+
+          <h1>
+            JOIN THE
+            <span>NORIX ARENA.</span>
+          </h1>
+
+          <p>
+            Create your account and gear up for your next victory.
+            Unlock tournament telemetry, member-only drops,
+            and zero-latency hardware orders.
+          </p>
+
+          <ul>
+            <li>Exclusive priority dispatch across India on all 90 catalog items</li>
+            <li>2-Year Instant NORIX Care hardware replacement coverage</li>
+            <li>Sync configurations, firmware updates and telemetry tracking</li>
+          </ul>
         </div>
 
-        <% if (typeof error !== 'undefined' && error) { %>
-          <div class="auth-error"><%= error %></div>
-        <% } %>
+        <div class="signup-promo-bottom">
+          <span>256-Bit SSL Encrypted</span>
+          <span>Trusted by 45,000+ Gamers</span>
+        </div>
 
-        <form action="/signup" method="POST" class="signup-form">
+      </div>
 
-          <div class="signup-field">
-            <label for="name">FULL NAME <span>*</span></label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="e.g. Alex Mercer"
-              autocomplete="name"
-              required
-            >
+      <!-- Right signup form -->
+      <div class="signup-form-panel">
+
+        <div class="signup-form-container">
+
+          <div class="signup-form-top">
+            <a href="/" class="auth-logo">NORIX<span>.</span></a>
+            <span class="step-label">STEP 1 OF 2</span>
           </div>
 
-          <div class="signup-field">
-            <label for="email">EMAIL ADDRESS <span>*</span></label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Enter your email address"
-              autocomplete="email"
-              required
-            >
+          <div class="signup-heading">
+            <h2>Create Account</h2>
+            <p>Join NORIX and find your next-level gaming gear.</p>
           </div>
 
-          <div class="signup-password-row">
-
-            <div class="signup-field">
-              <label for="password">PASSWORD <span>*</span></label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Min. 8 characters"
-                minlength="8"
-                autocomplete="new-password"
-                required
-              >
+          <% if (typeof error !=='undefined' && error) { %>
+            <div class="auth-error">
+              <%= error %>
             </div>
+            <% } %>
 
-            <div class="signup-field">
-              <label for="confirmPassword">CONFIRM PASSWORD <span>*</span></label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Re-enter password"
-                minlength="8"
-                autocomplete="new-password"
-                required
-              >
-            </div>
+              <form action="/signup" method="POST" class="signup-form">
 
-          </div>
+                <div class="signup-field">
+                  <label for="name">FULL NAME <span>*</span></label>
+                  <input type="text" id="name" name="name" placeholder="e.g. Alex Mercer" autocomplete="name" required>
+                </div>
 
-          <div class="signup-password-hint">
-            <span>✓ 8+ characters</span>
-            <span>✓ 1 number</span>
-            <span>✓ 1 special symbol</span>
-          </div>
+                <div class="signup-field">
+                  <label for="email">EMAIL ADDRESS <span>*</span></label>
+                  <input type="email" id="email" name="email" placeholder="Enter your email address"
+                    autocomplete="email" required>
+                </div>
 
-          <!-- Referral code -->
-          <div class="signup-field">
-            <label for="referralCode">
-              REFERRAL CODE
-              <span class="referral-optional">(OPTIONAL)</span>
-            </label>
-            <input
-              type="text"
-              id="referralCode"
-              name="referralCode"
-              placeholder="Enter referral code if you have one"
-              autocomplete="off"
-            >
-          </div>
+                <div class="signup-password-row">
 
-          <label class="signup-terms">
-            <input type="checkbox" name="termsAccepted" value="true" required>
-            <span>
-              I agree to the
-              <a href="/terms">Terms & Conditions</a>
-              and
-              <a href="/privacy">Privacy Policy</a>.
-            </span>
-          </label>
+                  <div class="signup-field">
+                    <label for="password">PASSWORD <span>*</span></label>
+                    <input type="password" id="password" name="password" placeholder="Min. 8 characters" minlength="8"
+                      autocomplete="new-password" required>
+                    <div class="password-rules">
+                      <p id="length">✗ At least 8 characters</p>
+                      <p id="uppercase">✗ One uppercase letter (A-Z)</p>
+                      <p id="lowercase">✗ One lowercase letter (a-z)</p>
+                      <p id="number">✗ One number (0-9)</p>
+                      <p id="special">✗ One special character (@#$!)</p>
+                    </div>
+                  </div>
 
-          <button type="submit" class="signup-submit">
-            CREATE ACCOUNT <span>→</span>
-          </button>
+                  <div class="signup-field">
+                    <label for="confirmPassword">CONFIRM PASSWORD <span>*</span></label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password"
+                      minlength="8" autocomplete="new-password" required>
+                  </div>
 
-        </form>
+                </div>
 
-        <div class="signup-divider">OR CONTINUE WITH</div>
+                <div class="signup-password-hint">
+                  <span>✓ 8+ characters</span>
+                  <span>✓ 1 number</span>
+                  <span>✓ 1 special symbol</span>
+                </div>
 
-        <a href="/auth/google" class="google-login">
-          <strong>G</strong>
-          Continue with Google
-        </a>
+                <!-- Referral code -->
+                <div class="signup-field">
+                  <label for="referralCode">
+                    REFERRAL CODE
+                    <span class="referral-optional">(OPTIONAL)</span>
+                  </label>
+                  <input type="text" id="referralCode" name="referralCode"
+                    placeholder="Enter referral code if you have one" autocomplete="off">
+                </div>
 
-        <p class="signup-login-prompt">
-          Already have an account?
-          <a href="/login">Login</a>
-        </p>
+                <label class="signup-terms">
+                  <input type="checkbox" name="termsAccepted" value="true" required>
+                  <span>
+                    I agree to the
+                    <a href="/terms">Terms & Conditions</a>
+                    and
+                    <a href="/privacy">Privacy Policy</a>.
+                  </span>
+                </label>
 
-        <div class="auth-security">
-          <span>♢ Zero Spam Policy</span>
-          <span>•</span>
-          <span>♙ Encrypted Credentials</span>
+                <button type="submit" class="signup-submit">
+                  CREATE ACCOUNT <span>→</span>
+                </button>
+
+              </form>
+
+              <div class="signup-divider">OR CONTINUE WITH</div>
+
+              <a href="/auth/google" class="google-login">
+                <strong>G</strong>
+                Continue with Google
+              </a>
+
+              <p class="signup-login-prompt">
+                Already have an account?
+                <a href="/login">Login</a>
+              </p>
+
+              <div class="auth-security">
+                <span>♢ Zero Spam Policy</span>
+                <span>•</span>
+                <span>♙ Encrypted Credentials</span>
+              </div>
+
         </div>
 
       </div>
 
-    </div>
+    </section>
 
-  </section>
+    <!-- Bottom footer -->
+    <footer class="signup-footer">
+      <span>NORIX &nbsp; | &nbsp; Precision Esports Hardware & Battlestation Gear</span>
 
-  <!-- Bottom footer -->
-  <footer class="signup-footer">
-    <span>NORIX &nbsp; | &nbsp; Precision Esports Hardware & Battlestation Gear</span>
+      <div>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/security">Security Audit</a>
+        <span>© 2026 NORIX. All rights reserved.</span>
+      </div>
+    </footer>
 
-    <div>
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Service</a>
-      <a href="/security">Security Audit</a>
-      <span>© 2026 NORIX. All rights reserved.</span>
-    </div>
-  </footer>
+  </main>
 
-</main>
 
-</body>
-</html>
+  <script>
+  const passwordInput = document.getElementById('password');
+
+  const rules = {
+    length: value => value.length >= 8,
+    uppercase: value => /[A-Z]/.test(value),
+    lowercase: value => /[a-z]/.test(value),
+    number: value => /[0-9]/.test(value),
+    special: value => /[^A-Za-z0-9]/.test(value)
+  };
+
+  passwordInput.addEventListener('input', () => {
+    const value = passwordInput.value;
+
+    Object.entries(rules).forEach(([id, check]) => {
+      const element = document.getElementById(id);
+      const valid = check(value);
+
+      element.textContent =
+        `${valid ? '✓' : '✗'} ${element.textContent.slice(2)}`;
+
+      element.style.color = valid ? 'green' : 'red';
+    });
+  });
+</script>
+  </body>
+
+  </html>

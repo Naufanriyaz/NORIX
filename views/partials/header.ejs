@@ -37,9 +37,25 @@
           <span class="action-count"><%= cartCount || 0 %></span>
         </a>
 
-        <a href="/profile" class="profile-avatar">
-          N
-        </a>
+       
+<a href="/profile" class="profile-avatar" aria-label="My Profile">
+
+  <% if (user.profileImage) { %>
+
+    <img
+      src="<%= user.profileImage %>"
+      alt="Profile"
+      class="navbar-profile-image"
+    >
+
+  <% } else { %>
+
+    <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+
+  <% } %>
+
+</a>
+
 
       <% } else { %>
 

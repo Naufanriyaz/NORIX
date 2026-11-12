@@ -1,0 +1,652 @@
+
+<%- include('../partials/head', { title: 'NORIX | Edit Profile' }) %>
+<%- include('../partials/header', { currentPage: 'profile' }) %>
+
+<main class="edit-profile-page">
+
+  <!-- PAGE HEADING -->
+  <section class="profile-heading">
+    <div class="profile-breadcrumb">
+      <a href="/">HOME</a> /
+      <a href="/profile">MY ACCOUNT</a> /
+      EDIT PROFILE
+    </div>
+
+    <h1>EDIT PROFILE</h1>
+    <p>Update your personal information and profile picture.</p>
+  </section>
+
+  <div class="edit-profile-container">
+
+    <section class="edit-profile-card">
+
+      <div class="edit-profile-heading">
+        <div>
+          <span class="panel-icon">♙</span>
+          <h2>PERSONAL INFORMATION</h2>
+          <p>Keep your NORIX account details up to date.</p>
+        </div>
+      </div>
+
+      <!-- PROFILE IMAGE SECTION -->
+      <div class="profile-image-section">
+
+        <h3>PROFILE PICTURE</h3>
+        <p>JPG, PNG or WEBP. Maximum file size: 2 MB.</p>
+
+        <form
+          action="/profile/upload-image"
+          method="POST"
+          enctype="multipart/form-data"
+          id="profileImageForm"
+          novalidate
+        >
+
+          <div class="profile-image-preview">
+
+            <% if (user.profileImage) { %>
+              <img
+                src="<%= user.profileImage %>"
+                id="imagePreview"
+                alt="Profile picture"
+              >
+            <% } else { %>
+              <div id="imageFallback">
+                <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+              </div>
+
+              <img
+                id="imagePreview"
+                alt="Profile picture preview"
+                style="display: none;"
+              >
+            <% } %>
+
+          </div>
+
+          <input
+            type="file"
+            id="profileImage"
+            name="profileImage"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+          >
+
+          <div class="profile-image-actions">
+
+            <button type="button" id="chooseImageBtn">
+              CHOOSE IMAGE
+            </button>
+
+            <button type="submit" id="uploadImageBtn" disabled>
+              UPLOAD PICTURE →
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- PERSONAL INFORMATION FORM -->
+      <form
+        action="/profile/edit"
+        method="POST"
+        id="editProfileForm"
+        novalidate
+      >
+
+        <!-- FULL NAME -->
+        <div class="edit-form-group">
+
+          <label for="name">FULL NAME</label>
+
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value="<%= user.name %>"
+            placeholder="Enter your full name"
+            autocomplete="name"
+          >
+
+          <small class="field-error" id="nameError"></small>
+
+        </div>
+
+        <!-- PHONE NUMBER -->
+        <div class="edit-form-group">
+
+          <label for="phone">PHONE NUMBER</label>
+
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value="<%= user.phone || '' %>"
+            placeholder="Enter your 10-digit phone number"
+            autocomplete="tel"
+          >
+
+          <small class="field-error" id="phoneError"></small>
+
+        </div>
+
+        <!-- EMAIL ADDRESS -->
+        <div class="edit-form-group">
+
+          <label for="email">EMAIL ADDRESS</label>
+
+          <input
+            type="email"
+            id="email"
+            value="<%= user.email %>"
+            readonly
+          >
+
+          <small class="field-hint">
+            Email changes require separate OTP verification.
+          </small>
+
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="edit-profile-actions">
+
+          <a href="/profile" class="edit-cancel-btn">
+            CANCEL
+          </a>
+
+          <button type="submit" class="edit-save-btn">
+            SAVE CHANGES →
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </div>
+
+</main>
+
+<!-- CUSTOM NORIX POPUP -->
+<div
+  class="edit-popup-overlay"
+  id="editPopup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="editPopupTitle"
+  style="display: none;"
+>
+
+  <div class="edit-popup">
+
+    <div class="edit-popup-icon">!</div>
+
+    <h3 id="editPopupTitle">Validation Error</h3>
+
+    <p id="editPopupMessage"></p>
+
+    <button type="button" id="editPopupClose">
+      OK
+    </button>
+
+  </div>
+
+</div>
+
+<style>
+  .edit-profile-container {
+    max-width: 850px;
+    margin: 40px auto 70px;
+    padding: 0 20px;
+  }
+
+  .edit-profile-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    padding: 35px;
+    border-radius: 10px;
+  }
+
+  .edit-profile-heading {
+    margin-bottom: 30px;
+  }
+
+  .edit-profile-heading h2 {
+    display: inline-block;
+    font-size: 19px;
+    margin-left: 10px;
+  }
+
+  .edit-profile-heading p {
+    color: #777;
+    margin-top: 8px;
+  }
+
+  /* PROFILE IMAGE */
+
+  .profile-image-section {
+    margin-bottom: 35px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .profile-image-section h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .profile-image-section p {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .profile-image-preview {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eee;
+    margin-bottom: 20px;
+  }
+
+  .profile-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #imageFallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    font-weight: bold;
+    color: #222;
+  }
+
+  .profile-image-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  #chooseImageBtn,
+  #uploadImageBtn {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  #chooseImageBtn {
+    background: #eee;
+    color: #222;
+  }
+
+  #uploadImageBtn {
+    background: #222;
+    color: #fff;
+  }
+
+  #uploadImageBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* PERSONAL INFORMATION */
+
+  .edit-form-group {
+    margin-bottom: 25px;
+  }
+
+  .edit-form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .edit-form-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .edit-form-group input:focus {
+    border-color: #222;
+  }
+
+  .edit-form-group input[readonly] {
+    background: #f3f3f3;
+    cursor: not-allowed;
+  }
+
+  .field-error {
+    display: block;
+    color: #d62828;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+
+  .field-hint {
+    display: block;
+    color: #777;
+    font-size: 12px;
+    margin-top: 7px;
+  }
+
+  /* ACTION BUTTONS */
+
+  .edit-profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 35px;
+  }
+
+  .edit-cancel-btn,
+  .edit-save-btn {
+    padding: 14px 22px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+  }
+
+  .edit-cancel-btn {
+    color: #222;
+    background: #eee;
+  }
+
+  .edit-save-btn {
+    color: #fff;
+    background: #222;
+  }
+
+  .edit-save-btn:hover,
+  #uploadImageBtn:not(:disabled):hover {
+    background: #444;
+  }
+
+  /* CUSTOM POPUP */
+
+  .edit-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .edit-popup {
+    background: #fff;
+    width: 100%;
+    max-width: 380px;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .edit-popup-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #fff0f0;
+    color: #d62828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 auto 15px;
+  }
+
+  .edit-popup h3 {
+    margin-bottom: 10px;
+  }
+
+  .edit-popup p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .edit-popup button {
+    margin-top: 20px;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .edit-profile-card {
+      padding: 22px;
+    }
+
+    .edit-profile-actions {
+      flex-direction: column;
+    }
+
+    .edit-profile-actions a,
+    .edit-profile-actions button {
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  // CUSTOM POPUP
+  const editPopup = document.getElementById('editPopup');
+  const popupTitle = document.getElementById('editPopupTitle');
+  const popupMessage = document.getElementById('editPopupMessage');
+  const popupClose = document.getElementById('editPopupClose');
+
+  function showPopup(title, message) {
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    editPopup.style.display = 'flex';
+    popupClose.focus();
+  }
+
+  function closePopup() {
+    editPopup.style.display = 'none';
+  }
+
+  popupClose.addEventListener('click', closePopup);
+
+  editPopup.addEventListener('click', (event) => {
+    if (event.target === editPopup) {
+      closePopup();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closePopup();
+    }
+  });
+
+  // SHOW BACKEND VALIDATION ERRORS
+  const serverError = <%- JSON.stringify(
+    typeof error !== 'undefined' ? error : null
+  ).replace(/</g, '\\u003c') %>;
+
+  if (serverError) {
+    showPopup('Validation Error', serverError);
+  }
+
+  // EDIT PROFILE VALIDATION
+  const editForm = document.getElementById('editProfileForm');
+  const nameInput = document.getElementById('name');
+  const phoneInput = document.getElementById('phone');
+  const nameError = document.getElementById('nameError');
+  const phoneError = document.getElementById('phoneError');
+
+  editForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    nameError.textContent = '';
+    phoneError.textContent = '';
+
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+
+    if (!name) {
+      nameError.textContent = 'Full name is required.';
+      showPopup('Missing Name', 'Please enter your full name.');
+      return;
+    }
+
+    if (name.length < 3) {
+      nameError.textContent = 'Name must contain at least 3 characters.';
+      showPopup('Invalid Name', 'Name must contain at least 3 characters.');
+      return;
+    }
+
+    if (!/^[A-Za-z ]+$/.test(name)) {
+      nameError.textContent = 'Name can contain only letters and spaces.';
+      showPopup('Invalid Name', 'Please enter a valid name.');
+      return;
+    }
+
+    if (!phone) {
+      phoneError.textContent = 'Phone number is required.';
+      showPopup('Missing Phone Number', 'Please enter your phone number.');
+      return;
+    }
+
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+      phoneError.textContent = 'Enter a valid 10-digit Indian mobile number.';
+      showPopup(
+        'Invalid Phone Number',
+        'Please enter a valid 10-digit Indian mobile number.'
+      );
+      return;
+    }
+
+    // Frontend validation passed
+    editForm.submit();
+  });
+
+  // PROFILE IMAGE UPLOAD
+  const profileImageForm = document.getElementById('profileImageForm');
+  const profileImageInput = document.getElementById('profileImage');
+  const chooseImageBtn = document.getElementById('chooseImageBtn');
+  const uploadImageBtn = document.getElementById('uploadImageBtn');
+  const imagePreview = document.getElementById('imagePreview');
+  const imageFallback = document.getElementById('imageFallback');
+
+  const allowedTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/webp'
+  ];
+
+  const maxImageSize = 2 * 1024 * 1024;
+
+  let previewURL = null;
+
+  chooseImageBtn.addEventListener('click', () => {
+    profileImageInput.click();
+  });
+
+  profileImageInput.addEventListener('change', () => {
+    const file = profileImageInput.files[0];
+
+    uploadImageBtn.disabled = true;
+
+    if (!file) return;
+
+    if (!allowedTypes.includes(file.type)) {
+      profileImageInput.value = '';
+
+      showPopup(
+        'Invalid Image',
+        'Only JPG, PNG and WEBP images are allowed.'
+      );
+      return;
+    }
+
+    if (file.size > maxImageSize) {
+      profileImageInput.value = '';
+
+      showPopup(
+        'Image Too Large',
+        'Please select an image smaller than 2 MB.'
+      );
+      return;
+    }
+
+    if (previewURL) {
+      URL.revokeObjectURL(previewURL);
+    }
+
+    previewURL = URL.createObjectURL(file);
+
+    imagePreview.src = previewURL;
+    imagePreview.style.display = 'block';
+
+    if (imageFallback) {
+      imageFallback.style.display = 'none';
+    }
+
+    uploadImageBtn.disabled = false;
+  });
+
+  profileImageForm.addEventListener('submit', (event) => {
+    const file = profileImageInput.files[0];
+
+    if (!file) {
+      event.preventDefault();
+
+      showPopup(
+        'No Image Selected',
+        'Please choose a profile picture first.'
+      );
+
+      return;
+    }
+
+    if (!allowedTypes.includes(file.type) || file.size > maxImageSize) {
+      event.preventDefault();
+
+      showPopup(
+        'Invalid Image',
+        'Please select a valid image smaller than 2 MB.'
+      );
+    }
+  });
+
+  window.addEventListener('pagehide', () => {
+    if (previewURL) {
+      URL.revokeObjectURL(previewURL);
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

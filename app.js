@@ -103,12 +103,13 @@ app.get('/profile', requireAuth, async (req, res) => {
       return;
     }
 
-    res.render('user/profile', {
-      title: 'NORIX | My Profile',
-      user,
-      cartCount: 0,
-      wishlistCount: 0
-    });
+ res.render('user/profile', {
+  title: 'NORIX | My Profile',
+  user,
+  cartCount: 0,
+  wishlistCount: 0,
+  uploadError: req.query.uploadError || null
+});
 
   } catch (error) {
     console.error('Profile page error:', error);
