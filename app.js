@@ -8,8 +8,11 @@ const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const User = require('./models/User');
 const { requireAuth, guestOnly } = require('./middlewares/auth');
+const passport = require('passport');
+const configurePassport = require('./config/passport');
 
 const app = express();
+configurePassport(passport);
 const PORT = process.env.PORT || 3000;
 
 // View engine
@@ -39,6 +42,8 @@ app.use(
     }
   })
 );
+
+app.use(passport.initialize());
 
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -75,9 +80,15 @@ app.get('/', async (req, res) => {
 
 // Login page
 app.get('/login', guestOnly, (req, res) => {
+  let error = null;
+
+  if (req.query.error === 'google') {
+    error = 'Unable to login with Google. Your account may be blocked or Google authentication failed.';
+  }
+
   res.render('user/login', {
     title: 'Login | NORIX',
-    error: null
+    error
   });
 });
 

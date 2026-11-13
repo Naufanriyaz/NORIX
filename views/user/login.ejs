@@ -49,73 +49,94 @@
           <p>Sign in to continue to your account.</p>
         </div>
 
-        <% if (typeof error !== 'undefined' && error) { %>
-          <div class="auth-error"><%= error %></div>
-        <% } %>
+        <!-- LOGIN FORM -->
+        <form
+          action="/login"
+          method="POST"
+          class="auth-form"
+          id="loginForm"
+          novalidate
+        >
 
-        <form action="/login" method="POST" class="auth-form">
-
+          <!-- EMAIL -->
           <div class="auth-field">
+
             <label for="email">EMAIL ADDRESS <span>*</span></label>
 
             <div class="auth-input">
+
               <input
                 type="email"
                 id="email"
                 name="email"
                 placeholder="Enter your email address"
                 autocomplete="email"
-                required
               >
+
               <span>✉</span>
+
             </div>
+
           </div>
 
+          <!-- PASSWORD -->
           <div class="auth-field">
+
             <label for="password">PASSWORD <span>*</span></label>
 
             <div class="auth-input">
+
               <input
                 type="password"
                 id="password"
                 name="password"
                 placeholder="Enter your password"
                 autocomplete="current-password"
-                required
               >
+
               <span>◎</span>
+
             </div>
+
           </div>
 
+          <!-- OPTIONS -->
           <div class="auth-options">
+
             <label>
               <input type="checkbox" name="rememberMe">
               Remember this device
             </label>
 
             <a href="/forgot-password">Forgot Password?</a>
+
           </div>
 
+          <!-- SUBMIT -->
           <button type="submit" class="auth-submit">
             LOGIN TO YOUR ACCOUNT <span>→</span>
           </button>
 
         </form>
 
+        <!-- DIVIDER -->
         <div class="auth-divider">
           <span>OR CONTINUE WITH</span>
         </div>
 
+        <!-- GOOGLE LOGIN -->
         <a href="/auth/google" class="google-login">
           <strong>G</strong>
           Continue with Google
         </a>
 
+        <!-- SIGNUP LINK -->
         <p class="create-account">
           Don't have an account?
           <a href="/signup">Create Account</a>
         </p>
 
+        <!-- SECURITY -->
         <div class="auth-security">
           <span>♢ Zero Spam Policy</span>
           <span>•</span>
@@ -128,17 +149,287 @@
 
   </section>
 
-  <!-- BOTTOM FOOTER -->
+  <!-- FOOTER -->
   <footer class="auth-footer">
-    <span>© <%= new Date().getFullYear() %> NORIX. All rights reserved.</span>
+
+    <span>
+      © <%= new Date().getFullYear() %> NORIX. All rights reserved.
+    </span>
 
     <div>
       <a href="/privacy">Privacy Policy</a>
       <a href="/terms">Terms of Service</a>
     </div>
+
   </footer>
 
 </main>
+
+
+<!-- ================================== -->
+<!-- CUSTOM NORIX POPUP                 -->
+<!-- ================================== -->
+
+<div
+  class="edit-popup-overlay"
+  id="loginPopup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="loginPopupTitle"
+  style="display: none;"
+  data-server-error="<%= typeof error !== 'undefined' && error ? error : '' %>"
+>
+
+  <div class="edit-popup">
+
+    <div class="edit-popup-icon">!</div>
+
+    <h3 id="loginPopupTitle">Login Error</h3>
+
+    <p id="loginPopupMessage"></p>
+
+    <button type="button" id="loginPopupClose">
+      OK
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ================================== -->
+<!-- CUSTOM POPUP CSS                   -->
+<!-- ================================== -->
+
+<style>
+
+.edit-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 99999;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.edit-popup {
+  background: #fff;
+  width: 100%;
+  max-width: 430px;
+  padding: 34px 30px;
+  border-radius: 11px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.edit-popup-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff0f0;
+  color: #d62828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0 auto 20px;
+}
+
+.edit-popup h3 {
+  margin-bottom: 12px;
+  font-size: 20px;
+  color: #222;
+}
+
+.edit-popup p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.edit-popup button {
+  margin-top: 24px;
+  padding: 13px 40px;
+  border: none;
+  border-radius: 5px;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-popup button:hover {
+  background: #444;
+}
+
+@media (max-width: 480px) {
+  .edit-popup {
+    padding: 28px 20px;
+  }
+}
+
+</style>
+
+
+<!-- ================================== -->
+<!-- LOGIN VALIDATION                   -->
+<!-- ================================== -->
+
+<script>
+
+// POPUP ELEMENTS
+
+const loginPopup = document.getElementById('loginPopup');
+
+const popupTitle = document.getElementById('loginPopupTitle');
+
+const popupMessage = document.getElementById('loginPopupMessage');
+
+const popupClose = document.getElementById('loginPopupClose');
+
+
+// SHOW POPUP
+
+function showLoginPopup(title, message) {
+
+  popupTitle.textContent = title;
+
+  popupMessage.textContent = message;
+
+  loginPopup.style.display = 'flex';
+
+  popupClose.focus();
+
+}
+
+
+// CLOSE POPUP
+
+function closeLoginPopup() {
+
+  loginPopup.style.display = 'none';
+
+}
+
+popupClose.addEventListener('click', closeLoginPopup);
+
+
+// CLOSE WHEN CLICKING OUTSIDE
+
+loginPopup.addEventListener('click', (event) => {
+
+  if (event.target === loginPopup) {
+    closeLoginPopup();
+  }
+
+});
+
+
+// ESCAPE KEY
+
+document.addEventListener('keydown', (event) => {
+
+  if (
+    event.key === 'Escape' &&
+    loginPopup.style.display === 'flex'
+  ) {
+    closeLoginPopup();
+  }
+
+});
+
+
+// BACKEND ERROR POPUP
+
+const serverError = loginPopup.dataset.serverError;
+
+if (serverError) {
+
+  showLoginPopup('Login Failed', serverError);
+
+}
+
+
+// LOGIN FORM VALIDATION
+
+const loginForm = document.getElementById('loginForm');
+
+const emailInput = document.getElementById('email');
+
+const passwordInput = document.getElementById('password');
+
+
+loginForm.addEventListener('submit', (event) => {
+
+  event.preventDefault();
+
+  const email = emailInput.value.trim();
+
+  const password = passwordInput.value;
+
+
+  // EMAIL REQUIRED
+
+  if (!email) {
+
+    showLoginPopup(
+      'Missing Information',
+      'Please enter your email address.'
+    );
+
+    emailInput.focus();
+
+    return;
+
+  }
+
+
+  // EMAIL FORMAT
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailPattern.test(email)) {
+
+    showLoginPopup(
+      'Invalid Email',
+      'Please enter a valid email address.'
+    );
+
+    emailInput.focus();
+
+    return;
+
+  }
+
+
+  // PASSWORD REQUIRED
+
+  if (!password.trim()) {
+
+    showLoginPopup(
+      'Missing Information',
+      'Please enter your password.'
+    );
+
+    passwordInput.focus();
+
+    return;
+
+  }
+
+
+  // VALID FORM - SUBMIT TO BACKEND
+
+  HTMLFormElement.prototype.submit.call(loginForm);
+
+});
+
+</script>
+
+<%- include('../partials/footer') %>
 
 </body>
 </html>

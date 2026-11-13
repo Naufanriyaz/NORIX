@@ -1,6 +1,7 @@
 
 const express = require('express');
 const User = require('../models/User');
+const passport = require('passport');
 const { requireAuth } = require('../middlewares/auth');
 const {
   addAddress,
@@ -13,6 +14,7 @@ const {
   verifyProfileImage
 } = require('../config/multer');
 const router = express.Router();
+const { updateEmail } = require('../controllers/userController');
 
 const {
   signup,
@@ -23,7 +25,8 @@ const {
   forgotPassword,
   resetPassword,
   updateProfile,
-  uploadProfileImage
+  uploadProfileImage,
+  changePassword
 } = require('../controllers/userController');
 
 
@@ -59,6 +62,8 @@ router.post('/reset-password', resetPassword);
 router.post('/profile/edit', requireAuth, updateProfile);
 router.post('/addresses', requireAuth, addAddress);
 router.post('/addresses/:id/edit', requireAuth, editAddress);
+// SUBMIT NEW EMAIL
+router.post('/profile/update-email', requireAuth, updateEmail);
 router.post('/addresses/:id/delete', requireAuth, deleteAddress);
 router.post(
   '/addresses/:id/default',
@@ -75,6 +80,11 @@ router.post(
 router.post('/logout', logout);
 router.post('/verify-otp', verifyOTP);
 router.post('/resend-otp', resendOTP);
+router.post(
+  '/change-password',
+  requireAuth,
+  changePassword
+);
 
 
 router.get('/verify-otp', async (req, res) => {
@@ -89,29 +99,38 @@ router.get('/verify-otp', async (req, res) => {
 
     const user = await User.findOne({
       email: normalizedEmail,
-      otpPurpose: { $in: ['signup', 'forgotPassword'] }
+      otpPurpose: {
+        $in: ['signup', 'forgotPassword', 'emailChange']
+      }
     });
 
     if (!user) {
       return res.redirect('/signup');
     }
 
-    res.render('user/verify-otp', {
+    return res.render('user/verify-otp', {
+      title: 'NORIX | Verify OTP',
       email: normalizedEmail,
+      displayEmail: user.otpPurpose === 'emailChange'
+        ? user.pendingEmail
+        : normalizedEmail,
       otpExpiry: user.otpExpiry,
       status: req.query.status || null,
       otpLocked: user.otpAttempts >= 5,
-      otpPurpose: user.otpPurpose
+      otpPurpose: user.otpPurpose,
+      cartCount: 0,
+      wishlistCount: 0
     });
 
   } catch (error) {
     console.error('OTP page error:', error);
-    res.status(500).send('Unable to load OTP page');
+    return res.status(500).send('Unable to load OTP page');
   }
 });
 
+
 router.get('/reset-password', (req, res) => {
-  
+
   if (!req.session.passwordResetUserId) {
     return res.redirect('/forgot-password');
   }
@@ -136,7 +155,8 @@ router.get('/profile/edit', requireAuth, async (req, res) => {
       title: 'NORIX | Edit Profile',
       user,
       cartCount: 0,
-      wishlistCount: 0
+      wishlistCount: 0,
+       error: null
     });
 
   } catch (error) {
@@ -212,4 +232,98 @@ router.get('/addresses/:id/edit', requireAuth, async (req, res) => {
     res.redirect('/addresses');
   }
 });
+
+// Google Signup / Login
+router.get(
+  '/auth/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+);
+
+// Google OAuth Callback
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect: '/login?error=google'
+  }),
+  (req, res, next) => {
+    // Regenerate session to prevent session fixation
+    req.session.regenerate((error) => {
+      if (error) {
+        return next(error);
+      }
+
+      req.session.userId = req.user._id;
+
+      req.session.save((error) => {
+        if (error) {
+          return next(error);
+        }
+
+        res.redirect('/');
+      });
+    });
+  }
+);
+
+
+router.get('/change-password', requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId)
+      .select('name email profileImage');
+
+    if (!user) {
+      return res.redirect('/login');
+    }
+
+    const errors = {
+      empty: 'Please fill in all password fields.',
+      google: 'This account does not have a password.',
+      incorrect: 'Your current password is incorrect.',
+      weak: 'Your new password does not meet the password requirements.',
+      mismatch: 'New password and confirm password do not match.',
+      same: 'Your new password must be different from your current password.',
+      server: 'Something went wrong. Please try again.'
+    };
+
+    res.render('user/change-password', {
+      title: 'Change Password | NORIX',
+      user,
+      cartCount: 0,
+      wishlistCount: 0,
+      error: errors[req.query.error] || null
+    });
+
+  } catch (error) {
+    console.error('Change password page error:', error);
+    res.redirect('/profile');
+  }
+});
+
+
+// UPDATE EMAIL PAGE
+router.get('/profile/update-email', requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+
+    if (!user) {
+      return res.redirect('/login');
+    }
+
+    return res.render('user/update-email', {
+      title: 'NORIX | Update Email',
+      user,
+      cartCount: 0,
+      wishlistCount: 0
+    });
+
+  } catch (error) {
+    console.error('Update email page error:', error);
+    return res.status(500).send('Unable to load update email page');
+  }
+});
+
+
 module.exports = router;

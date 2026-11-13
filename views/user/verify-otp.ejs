@@ -1,6 +1,6 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,160 +8,450 @@
   <link rel="stylesheet" href="/css/norix.css">
 
   <style>
-  .otp-popup {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
+    .otp-page {
+      min-height: 100vh;
+      background: #f5f3f2;
+      font-family: Arial, sans-serif;
+    }
 
-  .otp-popup-content {
-    background: #fff;
-    color: #222;
-    padding: 25px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 350px;
-    text-align: center;
-  }
+    .otp-header {
+      height: 60px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+    }
 
-  .otp-popup-content button {
-    padding: 10px 25px;
-    cursor: pointer;
-  }
-</style>
+    .otp-logo {
+      color: #222;
+      font-size: 22px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .otp-logo span {
+      color: #ff6500;
+    }
+
+    .otp-return {
+      color: #ff6500;
+      font-size: 11px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .otp-card {
+      width: 90%;
+      max-width: 420px;
+      margin: 65px auto;
+      background: #fff;
+      padding: 35px;
+      text-align: center;
+      border-radius: 6px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.10);
+      box-sizing: border-box;
+    }
+
+    .otp-icon {
+      width: 48px;
+      height: 48px;
+      background: #fff0e7;
+      color: #ff6500;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 23px;
+    }
+
+    .otp-label {
+      color: #ff6500;
+      font-size: 9px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .otp-card h1 {
+      font-size: 21px;
+      margin: 10px 0;
+      color: #222;
+    }
+
+    .otp-description {
+      color: #777;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-bottom: 25px;
+      overflow-wrap: anywhere;
+    }
+
+    .otp-input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d5dce5;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 23px;
+      letter-spacing: 13px;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    .otp-input:focus {
+      border-color: #ff6500;
+    }
+
+    .otp-verify-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 18px;
+      background: #ff6500;
+      border: none;
+      color: #fff;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .otp-verify-btn:hover {
+      background: #e85b00;
+    }
+
+    .otp-verify-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .otp-timer {
+      margin: 15px 0;
+      color: #777;
+      font-size: 11px;
+    }
+
+    .otp-timer strong {
+      color: #ff6500;
+    }
+
+    .otp-resend {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #f5f3f2;
+      color: #222;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .otp-resend:disabled {
+      color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .otp-footer {
+      font-size: 9px;
+      color: #999;
+      margin-top: 20px;
+    }
+
+    /* NORIX POPUP */
+
+    .norix-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 99999;
+      box-sizing: border-box;
+    }
+
+    .norix-popup {
+      width: 100%;
+      max-width: 430px;
+      padding: 34px 30px;
+      background: #fff;
+      border-radius: 11px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .norix-popup-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #fff0f0;
+      color: #d62828;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: bold;
+      margin: 0 auto 20px;
+    }
+
+    .norix-popup h3 {
+      margin-bottom: 12px;
+      color: #222;
+    }
+
+    .norix-popup p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .norix-popup button {
+      margin-top: 24px;
+      padding: 13px 40px;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media(max-width: 480px) {
+      .otp-card {
+        padding: 25px 20px;
+        margin: 35px auto;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
+<div class="otp-page">
 
-  <div id="otpPopup" class="otp-popup" style="display: none;">
-  <div class="otp-popup-content">
-    <h3 id="popupTitle">Verification</h3>
-    <p id="popupMessage"></p>
-    <button type="button" id="popupClose">OK</button>
-  </div>
-</div>
+  <header class="otp-header">
+    <a href="/" class="otp-logo">NORIX<span>.</span></a>
+    <a href="/" class="otp-return">← RETURN TO STORE</a>
+  </header>
 
+  <main class="otp-card">
 
-  <main>
-    <h1>Verify Your Email</h1>
+    <div class="otp-icon">✉</div>
 
-    <p>We've sent a verification code to <%= email %>
+    <span class="otp-label">EMAIL VERIFICATION</span>
+
+    <h1>VERIFY YOUR EMAIL</h1>
+
+  <p class="otp-description">
+  We've sent a 6-digit verification code to
+  <strong><%= displayEmail || email %></strong>.
+  Please enter the code below.
+</p>
+
+    <form action="/verify-otp" method="POST" id="otpForm" novalidate>
+
+      <input type="hidden" name="email" value="<%= email %>">
+
+      <input
+        type="text"
+        id="otp"
+        name="otp"
+        class="otp-input"
+        placeholder="000000"
+        maxlength="6"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+      >
+
+      <button type="submit" class="otp-verify-btn" id="verifyBtn">
+        VERIFY & CONTINUE →
+      </button>
+
+    </form>
+
+    <p class="otp-timer">
+      Didn't receive the email?
+      Expires in <strong id="timer">05:00</strong>
     </p>
 
-    <form action="/verify-otp" method="POST">
+    <form action="/resend-otp" method="POST" id="resendForm" novalidate>
       <input type="hidden" name="email" value="<%= email %>">
-
-      <label for="otp">Enter your 6-digit OTP</label>
-
-      <input type="text" id="otp" name="otp" maxlength="6" minlength="6" pattern="[0-9]{6}" inputmode="numeric"
-        autocomplete="one-time-code" required>
-
-      <button type="submit">Verify OTP</button>
-    </form>
-
-    <p>OTP expires in: <strong id="timer">05:00</strong></p>
-
-    <form action="/resend-otp" method="POST">
-      <input type="hidden" name="email" value="<%= email %>">
-
-      <button type="submit" id="resendBtn" disabled>
-        Resend OTP
+      <button type="submit" class="otp-resend" id="resendBtn" disabled>
+        RESEND OTP
       </button>
     </form>
+
+    <div class="otp-footer">
+      © 2026 NORIX. ALL RIGHTS RESERVED · SECURE EMAIL VERIFICATION
+    </div>
+
   </main>
 
-  <script>
-    const expiryTime = new Date('<%= otpExpiry.toISOString() %>').getTime();
+</div>
 
-    const timerDisplay = document.getElementById('timer');
-    const resendBtn = document.getElementById('resendBtn');
-    const otpInput = document.getElementById('otp');
-    const verifyBtn = document.querySelector(
-      'form[action="/verify-otp"] button[type="submit"]'
-    );
+<!-- CUSTOM POPUP -->
 
-   function lockOTPForm() {
-  otpInput.disabled = true;
-  verifyBtn.disabled = true;
-  resendBtn.disabled = false;
+<div class="norix-popup-overlay" id="otpPopup" role="dialog"
+  aria-modal="true" aria-labelledby="otpPopupTitle">
 
-  clearInterval(countdown);
+  <div class="norix-popup">
+    <div class="norix-popup-icon">!</div>
+    <h3 id="otpPopupTitle">Verification Error</h3>
+    <p id="otpPopupMessage"></p>
+    <button type="button" id="otpPopupClose">OK</button>
+  </div>
 
-  timerDisplay.textContent = 'Attempts exceeded';
-}
+</div>
 
-    function updateTimer() {
-      const remaining = Math.max(0, expiryTime - Date.now());
+<script>
+  const otpForm = document.getElementById('otpForm');
+  const otpInput = document.getElementById('otp');
+  const verifyBtn = document.getElementById('verifyBtn');
+  const resendBtn = document.getElementById('resendBtn');
+  const timerDisplay = document.getElementById('timer');
 
-      const minutes = Math.floor(remaining / 60000);
-      const seconds = Math.floor((remaining % 60000) / 1000);
+  const popup = document.getElementById('otpPopup');
+  const popupTitle = document.getElementById('otpPopupTitle');
+  const popupMessage = document.getElementById('otpPopupMessage');
+  const popupClose = document.getElementById('otpPopupClose');
 
-      timerDisplay.textContent =
-        String(minutes).padStart(2, '0') + ':' +
-        String(seconds).padStart(2, '0');
+  const status = <%- JSON.stringify(status || '') %>;
+  const otpLocked = <%- JSON.stringify(!!otpLocked) %>;
 
-      if (remaining <= 0) {
-        clearInterval(countdown);
-        timerDisplay.textContent = 'Expired';
-        resendBtn.disabled = false;
-      }
+  const expiryValue = <%- JSON.stringify(otpExpiry ? otpExpiry.toISOString() : null) %>;
+
+  function showPopup(title, message) {
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    popup.style.display = 'flex';
+    popupClose.focus();
+  }
+
+  function closePopup() {
+    popup.style.display = 'none';
+  }
+
+  popupClose.addEventListener('click', closePopup);
+
+  popup.addEventListener('click', (event) => {
+    if (event.target === popup) closePopup();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closePopup();
+  });
+
+  const messages = {
+    invalid: {
+      title: 'Invalid OTP',
+      message: 'The OTP you entered is incorrect. Please try again.'
+    },
+    locked: {
+      title: 'Too Many Attempts',
+      message: 'You have reached the maximum attempts. Please request a new OTP.'
+    },
+    expired: {
+      title: 'OTP Expired',
+      message: 'Your OTP has expired. Please request a new one.'
+    },
+    missing: {
+      title: 'Missing Information',
+      message: 'Please enter your 6-digit OTP.'
+    },
+    notfound: {
+      title: 'Verification Not Found',
+      message: 'Your verification request was not found. Please sign up again.'
     }
+  };
+
+  if (messages[status]) {
+    showPopup(messages[status].title, messages[status].message);
+  }
+
+  function lockOTPForm() {
+    otpInput.disabled = true;
+    verifyBtn.disabled = true;
+    resendBtn.disabled = false;
+    timerDisplay.textContent = 'Attempts exceeded';
+    if (countdown) clearInterval(countdown);
+  }
+
+  let countdown = null;
+
+  function updateTimer() {
+    if (!expiryValue) {
+      timerDisplay.textContent = 'Unavailable';
+      resendBtn.disabled = false;
+      return;
+    }
+
+    const remaining = Math.max(0, new Date(expiryValue).getTime() - Date.now());
+
+    const minutes = Math.floor(remaining / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+
+    timerDisplay.textContent =
+      String(minutes).padStart(2, '0') + ':' +
+      String(seconds).padStart(2, '0');
+
+    if (remaining <= 0) {
+      clearInterval(countdown);
+      timerDisplay.textContent = 'Expired';
+      resendBtn.disabled = false;
+
+      showPopup(
+        'OTP Expired',
+        'Your verification code has expired. Please request a new OTP.'
+      );
+    }
+  }
+
+  if (otpLocked) {
+    lockOTPForm();
+  } else {
+    resendBtn.disabled = false;
 
     updateTimer();
 
-    const countdown = setInterval(updateTimer, 1000);
-
-    const popup = document.getElementById('otpPopup');
-const popupTitle = document.getElementById('popupTitle');
-const popupMessage = document.getElementById('popupMessage');
-const popupClose = document.getElementById('popupClose');
-
-const status = '<%= status || "" %>';
-const otpLocked = <%= otpLocked ? "true" : "false" %>;
-
-const messages = {
-  invalid: {
-    title: 'Invalid OTP',
-    message: 'The OTP you entered is incorrect. Please try again.'
-  },
-  locked: {
-    title: 'Too Many Attempts',
-    message: 'You have reached the maximum attempts. Please request a new OTP.'
-  },
-  expired: {
-    title: 'OTP Expired',
-    message: 'Your OTP has expired. Please request a new one.'
-  },
-  missing: {
-    title: 'Missing Information',
-    message: 'Please enter your OTP.'
-  },
-  notfound: {
-    title: 'Verification Not Found',
-    message: 'Your signup request was not found. Please sign up again.'
+    if (expiryValue && new Date(expiryValue).getTime() > Date.now()) {
+      resendBtn.disabled = true;
+      countdown = setInterval(updateTimer, 1000);
+    }
   }
-};
 
-if (messages[status]) {
-  popupTitle.textContent = messages[status].title;
-  popupMessage.textContent = messages[status].message;
-  popup.style.display = 'flex';
-}
+  otpInput.addEventListener('input', () => {
+    otpInput.value = otpInput.value.replace(/\D/g, '').slice(0, 6);
+  });
 
-popupClose.addEventListener('click', () => {
-  popup.style.display = 'none';
-});
+  otpForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-if (otpLocked) {
-  lockOTPForm();
-}
-  </script>
+    if (otpLocked) {
+      showPopup('Too Many Attempts', 'Please request a new OTP.');
+      return;
+    }
+
+    if (!otpInput.value.trim()) {
+      showPopup('Missing Information', 'Please enter your OTP.');
+      otpInput.focus();
+      return;
+    }
+
+    if (!/^\d{6}$/.test(otpInput.value)) {
+      showPopup('Invalid OTP', 'Please enter a valid 6-digit OTP.');
+      otpInput.focus();
+      return;
+    }
+
+    if (!expiryValue || Date.now() >= new Date(expiryValue).getTime()) {
+      showPopup('OTP Expired', 'Please request a new OTP.');
+      resendBtn.disabled = false;
+      return;
+    }
+
+    HTMLFormElement.prototype.submit.call(otpForm);
+  });
+</script>
 
 </body>
-
 </html>

@@ -1,0 +1,185 @@
+
+<%- include('../partials/head', { title: 'NORIX | Update Email' }) %>
+<%- include('../partials/header', { currentPage: 'profile' }) %>
+
+<main class="update-email-page">
+
+  <section class="update-email-container">
+
+    <div class="breadcrumb">
+      <a href="/">HOME</a> /
+      <a href="/profile">MY ACCOUNT</a> /
+      UPDATE EMAIL
+    </div>
+
+    <div class="email-card">
+
+      <div class="email-icon">✉</div>
+
+      <h1>UPDATE EMAIL ADDRESS</h1>
+
+      <p class="description">
+        Change your registered email address securely.
+        We will send an OTP to your new email for verification.
+      </p>
+
+      <div class="current-email">
+        <label>CURRENT EMAIL ADDRESS</label>
+        <strong><%= user.email %></strong>
+      </div>
+
+      <form action="/profile/update-email" method="POST" id="updateEmailForm">
+
+        <div class="form-group">
+          <label for="newEmail">NEW EMAIL ADDRESS</label>
+
+          <input
+            type="email"
+            id="newEmail"
+            name="email"
+            placeholder="Enter your new email address"
+            required
+            autocomplete="email"
+          >
+        </div>
+
+        <button type="submit" class="update-btn">
+          SEND VERIFICATION OTP →
+        </button>
+
+      </form>
+
+      <a href="/profile" class="back-link">
+        ← Back to Profile
+      </a>
+
+    </div>
+
+  </section>
+
+</main>
+
+<style>
+.update-email-page {
+  min-height: 75vh;
+  padding: 45px 20px;
+  background: #f8f8f8;
+}
+
+.update-email-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+.breadcrumb {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.breadcrumb a {
+  color: #555;
+  text-decoration: none;
+}
+
+.email-card {
+  background: #fff;
+  padding: 40px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+}
+
+.email-icon {
+  font-size: 35px;
+  margin-bottom: 15px;
+}
+
+.email-card h1 {
+  font-size: 23px;
+  margin-bottom: 12px;
+}
+
+.description {
+  color: #777;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+.current-email {
+  background: #f5f5f5;
+  padding: 17px;
+  border-radius: 6px;
+  margin-bottom: 25px;
+}
+
+.current-email label,
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.current-email strong {
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #222;
+}
+
+.update-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 5px;
+  background: #222;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.update-btn:hover {
+  background: #444;
+}
+
+.back-link {
+  display: block;
+  text-align: center;
+  margin-top: 22px;
+  color: #555;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .email-card {
+    padding: 25px 20px;
+  }
+
+  .email-card h1 {
+    font-size: 20px;
+  }
+}
+</style>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

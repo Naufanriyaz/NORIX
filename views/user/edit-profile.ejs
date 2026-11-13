@@ -17,7 +17,6 @@
   </section>
 
   <div class="edit-profile-container">
-
     <section class="edit-profile-card">
 
       <div class="edit-profile-heading">
@@ -51,6 +50,7 @@
                 alt="Profile picture"
               >
             <% } else { %>
+
               <div id="imageFallback">
                 <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
               </div>
@@ -60,6 +60,7 @@
                 alt="Profile picture preview"
                 style="display: none;"
               >
+
             <% } %>
 
           </div>
@@ -85,7 +86,6 @@
           </div>
 
         </form>
-
       </div>
 
       <!-- PERSONAL INFORMATION FORM -->
@@ -132,10 +132,10 @@
 
         </div>
 
-        <!-- EMAIL ADDRESS -->
+        <!-- REGISTERED EMAIL -->
         <div class="edit-form-group">
 
-          <label for="email">EMAIL ADDRESS</label>
+          <label for="email">REGISTERED EMAIL ADDRESS</label>
 
           <input
             type="email"
@@ -145,8 +145,13 @@
           >
 
           <small class="field-hint">
-            Email changes require separate OTP verification.
+            Your registered email cannot be edited here.
+            Use the button below to change your email through OTP verification.
           </small>
+
+          <a href="/profile/update-email" class="update-email-btn">
+            ✉ UPDATE EMAIL →
+          </a>
 
         </div>
 
@@ -166,7 +171,6 @@
       </form>
 
     </section>
-
   </div>
 
 </main>
@@ -198,6 +202,9 @@
 </div>
 
 <style>
+
+  /* PAGE CONTAINER */
+
   .edit-profile-container {
     max-width: 850px;
     margin: 40px auto 70px;
@@ -330,9 +337,12 @@
     border-color: #222;
   }
 
+  /* READ-ONLY EMAIL */
+
   .edit-form-group input[readonly] {
     background: #f3f3f3;
     cursor: not-allowed;
+    color: #666;
   }
 
   .field-error {
@@ -346,7 +356,31 @@
     display: block;
     color: #777;
     font-size: 12px;
+    line-height: 1.6;
     margin-top: 7px;
+  }
+
+  /* UPDATE EMAIL BUTTON */
+
+  .update-email-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+    padding: 13px 20px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #222;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .update-email-btn:hover {
+    background: #444;
+    border-color: #444;
   }
 
   /* ACTION BUTTONS */
@@ -441,7 +475,10 @@
     cursor: pointer;
   }
 
+  /* RESPONSIVE */
+
   @media (max-width: 600px) {
+
     .edit-profile-card {
       padding: 22px;
     }
@@ -454,11 +491,15 @@
     .edit-profile-actions button {
       text-align: center;
     }
+
   }
+
 </style>
 
 <script>
+
   // CUSTOM POPUP
+
   const editPopup = document.getElementById('editPopup');
   const popupTitle = document.getElementById('editPopupTitle');
   const popupMessage = document.getElementById('editPopupMessage');
@@ -489,7 +530,8 @@
     }
   });
 
-  // SHOW BACKEND VALIDATION ERRORS
+  // BACKEND VALIDATION ERRORS
+
   const serverError = <%- JSON.stringify(
     typeof error !== 'undefined' ? error : null
   ).replace(/</g, '\\u003c') %>;
@@ -499,6 +541,7 @@
   }
 
   // EDIT PROFILE VALIDATION
+
   const editForm = document.getElementById('editProfileForm');
   const nameInput = document.getElementById('name');
   const phoneInput = document.getElementById('phone');
@@ -506,6 +549,7 @@
   const phoneError = document.getElementById('phoneError');
 
   editForm.addEventListener('submit', (event) => {
+
     event.preventDefault();
 
     nameError.textContent = '';
@@ -522,7 +566,10 @@
 
     if (name.length < 3) {
       nameError.textContent = 'Name must contain at least 3 characters.';
-      showPopup('Invalid Name', 'Name must contain at least 3 characters.');
+      showPopup(
+        'Invalid Name',
+        'Name must contain at least 3 characters.'
+      );
       return;
     }
 
@@ -534,12 +581,17 @@
 
     if (!phone) {
       phoneError.textContent = 'Phone number is required.';
-      showPopup('Missing Phone Number', 'Please enter your phone number.');
+      showPopup(
+        'Missing Phone Number',
+        'Please enter your phone number.'
+      );
       return;
     }
 
     if (!/^[6-9]\d{9}$/.test(phone)) {
-      phoneError.textContent = 'Enter a valid 10-digit Indian mobile number.';
+      phoneError.textContent =
+        'Enter a valid 10-digit Indian mobile number.';
+
       showPopup(
         'Invalid Phone Number',
         'Please enter a valid 10-digit Indian mobile number.'
@@ -549,9 +601,11 @@
 
     // Frontend validation passed
     editForm.submit();
+
   });
 
   // PROFILE IMAGE UPLOAD
+
   const profileImageForm = document.getElementById('profileImageForm');
   const profileImageInput = document.getElementById('profileImage');
   const chooseImageBtn = document.getElementById('chooseImageBtn');
@@ -574,6 +628,7 @@
   });
 
   profileImageInput.addEventListener('change', () => {
+
     const file = profileImageInput.files[0];
 
     uploadImageBtn.disabled = true;
@@ -581,22 +636,26 @@
     if (!file) return;
 
     if (!allowedTypes.includes(file.type)) {
+
       profileImageInput.value = '';
 
       showPopup(
         'Invalid Image',
         'Only JPG, PNG and WEBP images are allowed.'
       );
+
       return;
     }
 
     if (file.size > maxImageSize) {
+
       profileImageInput.value = '';
 
       showPopup(
         'Image Too Large',
         'Please select an image smaller than 2 MB.'
       );
+
       return;
     }
 
@@ -614,12 +673,15 @@
     }
 
     uploadImageBtn.disabled = false;
+
   });
 
   profileImageForm.addEventListener('submit', (event) => {
+
     const file = profileImageInput.files[0];
 
     if (!file) {
+
       event.preventDefault();
 
       showPopup(
@@ -631,20 +693,26 @@
     }
 
     if (!allowedTypes.includes(file.type) || file.size > maxImageSize) {
+
       event.preventDefault();
 
       showPopup(
         'Invalid Image',
         'Please select a valid image smaller than 2 MB.'
       );
+
     }
+
   });
 
   window.addEventListener('pagehide', () => {
+
     if (previewURL) {
       URL.revokeObjectURL(previewURL);
     }
+
   });
+
 </script>
 
 <%- include('../partials/footer') %>

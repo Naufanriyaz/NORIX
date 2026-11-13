@@ -29,33 +29,35 @@
 
         <a href="/wishlist" class="header-icon" aria-label="Wishlist">
           ♡
-          <span class="action-count"><%= wishlistCount || 0 %></span>
+          <span class="action-count">
+            <%= typeof wishlistCount !== 'undefined' ? wishlistCount : 0 %>
+          </span>
         </a>
 
         <a href="/cart" class="header-icon" aria-label="Cart">
           ▢
-          <span class="action-count"><%= cartCount || 0 %></span>
+          <span class="action-count">
+            <%= typeof cartCount !== 'undefined' ? cartCount : 0 %>
+          </span>
         </a>
 
-       
-<a href="/profile" class="profile-avatar" aria-label="My Profile">
+        <a href="/profile" class="profile-avatar" aria-label="My Profile">
 
-  <% if (user.profileImage) { %>
+          <% if (user.profileImage) { %>
 
-    <img
-      src="<%= user.profileImage %>"
-      alt="Profile"
-      class="navbar-profile-image"
-    >
+            <img
+              src="<%= user.profileImage %>"
+              alt="Profile"
+              class="navbar-profile-image"
+            >
 
-  <% } else { %>
+          <% } else { %>
 
-    <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+            <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
 
-  <% } %>
+          <% } %>
 
-</a>
-
+        </a>
 
       <% } else { %>
 

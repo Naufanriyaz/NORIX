@@ -69,9 +69,25 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true
     },
+    pendingEmail: {
+      type: String,
+      default: null,
+      lowercase: true,
+      trim: true
+    },
+    googleId: {
+      type: String,
+      default: null
+    },
+    authProvider: {
+      type: String,
+      enum: ['local', 'google'],
+      default: 'local'
+    },
     password: {
       type: String,
-      required: true
+      required: false,
+      default: null
     },
     phone: {
       type: String,
@@ -107,7 +123,7 @@ const userSchema = new mongoose.Schema(
     },
     otpPurpose: {
       type: String,
-      enum: ['signup', 'forgotPassword'],
+      enum: ['signup', 'forgotPassword', 'emailChange'],
       default: null
     }
   },

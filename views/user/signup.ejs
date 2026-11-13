@@ -1,205 +1,631 @@
+
 <%- include('../partials/head', { title: 'Create Account | NORIX' }) %>
 
-  <main class="signup-page">
+<main class="signup-page">
 
-    <!-- Top bar -->
-    <header class="signup-header">
-      <a href="/" class="auth-logo">NORIX<span>.</span></a>
-      <span class="hardware-label">● Esports Grade Hardware</span>
-      <a href="/" class="return-store">Return to Store</a>
-    </header>
+  <!-- TOP BAR -->
+  <header class="signup-header">
+    <a href="/" class="auth-logo">NORIX<span>.</span></a>
+    <span class="hardware-label">● Esports Grade Hardware</span>
+    <a href="/" class="return-store">Return to Store</a>
+  </header>
 
-    <section class="signup-card">
+  <section class="signup-card">
 
-      <!-- Left promotional panel -->
-      <div class="signup-promo">
+    <!-- LEFT PROMOTIONAL PANEL -->
+    <div class="signup-promo">
 
-        <div class="signup-promo-top">
-          <span class="arena-label">● NORIX ARENA ACCESS</span>
-          <span class="series-label">PRO SERIES 2026</span>
-        </div>
-
-        <div class="signup-promo-content">
-          <span class="member-label">OFFICIAL MEMBERSHIP</span>
-
-          <h1>
-            JOIN THE
-            <span>NORIX ARENA.</span>
-          </h1>
-
-          <p>
-            Create your account and gear up for your next victory.
-            Unlock tournament telemetry, member-only drops,
-            and zero-latency hardware orders.
-          </p>
-
-          <ul>
-            <li>Exclusive priority dispatch across India on all 90 catalog items</li>
-            <li>2-Year Instant NORIX Care hardware replacement coverage</li>
-            <li>Sync configurations, firmware updates and telemetry tracking</li>
-          </ul>
-        </div>
-
-        <div class="signup-promo-bottom">
-          <span>256-Bit SSL Encrypted</span>
-          <span>Trusted by 45,000+ Gamers</span>
-        </div>
-
+      <div class="signup-promo-top">
+        <span class="arena-label">● NORIX ARENA ACCESS</span>
+        <span class="series-label">PRO SERIES 2026</span>
       </div>
 
-      <!-- Right signup form -->
-      <div class="signup-form-panel">
+      <div class="signup-promo-content">
+        <span class="member-label">OFFICIAL MEMBERSHIP</span>
 
-        <div class="signup-form-container">
+        <h1>
+          JOIN THE
+          <span>NORIX ARENA.</span>
+        </h1>
 
-          <div class="signup-form-top">
-            <a href="/" class="auth-logo">NORIX<span>.</span></a>
-            <span class="step-label">STEP 1 OF 2</span>
+        <p>
+          Create your account and gear up for your next victory.
+          Unlock tournament telemetry, member-only drops,
+          and zero-latency hardware orders.
+        </p>
+
+        <ul>
+          <li>Exclusive priority dispatch across India on all 90 catalog items</li>
+          <li>2-Year Instant NORIX Care hardware replacement coverage</li>
+          <li>Sync configurations, firmware updates and telemetry tracking</li>
+        </ul>
+      </div>
+
+      <div class="signup-promo-bottom">
+        <span>256-Bit SSL Encrypted</span>
+        <span>Trusted by 45,000+ Gamers</span>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIGNUP FORM -->
+    <div class="signup-form-panel">
+
+      <div class="signup-form-container">
+
+        <div class="signup-form-top">
+          <a href="/" class="auth-logo">NORIX<span>.</span></a>
+          <span class="step-label">STEP 1 OF 2</span>
+        </div>
+
+        <div class="signup-heading">
+          <h2>Create Account</h2>
+          <p>Join NORIX and find your next-level gaming gear.</p>
+        </div>
+
+        <form
+          action="/signup"
+          method="POST"
+          class="signup-form"
+          id="signupForm"
+          novalidate
+        >
+
+          <!-- FULL NAME -->
+          <div class="signup-field">
+            <label for="name">FULL NAME <span>*</span></label>
+
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="e.g. Alex Mercer"
+              autocomplete="name"
+            >
           </div>
 
-          <div class="signup-heading">
-            <h2>Create Account</h2>
-            <p>Join NORIX and find your next-level gaming gear.</p>
+          <!-- EMAIL -->
+          <div class="signup-field">
+            <label for="email">EMAIL ADDRESS <span>*</span></label>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email address"
+              autocomplete="email"
+            >
           </div>
 
-          <% if (typeof error !=='undefined' && error) { %>
-            <div class="auth-error">
-              <%= error %>
-            </div>
-            <% } %>
+          <!-- PASSWORD AND CONFIRM PASSWORD -->
+          <div class="signup-password-row">
 
-              <form action="/signup" method="POST" class="signup-form">
+            <div class="signup-field">
 
-                <div class="signup-field">
-                  <label for="name">FULL NAME <span>*</span></label>
-                  <input type="text" id="name" name="name" placeholder="e.g. Alex Mercer" autocomplete="name" required>
-                </div>
+              <label for="password">PASSWORD <span>*</span></label>
 
-                <div class="signup-field">
-                  <label for="email">EMAIL ADDRESS <span>*</span></label>
-                  <input type="email" id="email" name="email" placeholder="Enter your email address"
-                    autocomplete="email" required>
-                </div>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Min. 8 characters"
+                autocomplete="new-password"
+              >
 
-                <div class="signup-password-row">
-
-                  <div class="signup-field">
-                    <label for="password">PASSWORD <span>*</span></label>
-                    <input type="password" id="password" name="password" placeholder="Min. 8 characters" minlength="8"
-                      autocomplete="new-password" required>
-                    <div class="password-rules">
-                      <p id="length">✗ At least 8 characters</p>
-                      <p id="uppercase">✗ One uppercase letter (A-Z)</p>
-                      <p id="lowercase">✗ One lowercase letter (a-z)</p>
-                      <p id="number">✗ One number (0-9)</p>
-                      <p id="special">✗ One special character (@#$!)</p>
-                    </div>
-                  </div>
-
-                  <div class="signup-field">
-                    <label for="confirmPassword">CONFIRM PASSWORD <span>*</span></label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password"
-                      minlength="8" autocomplete="new-password" required>
-                  </div>
-
-                </div>
-
-                <div class="signup-password-hint">
-                  <span>✓ 8+ characters</span>
-                  <span>✓ 1 number</span>
-                  <span>✓ 1 special symbol</span>
-                </div>
-
-                <!-- Referral code -->
-                <div class="signup-field">
-                  <label for="referralCode">
-                    REFERRAL CODE
-                    <span class="referral-optional">(OPTIONAL)</span>
-                  </label>
-                  <input type="text" id="referralCode" name="referralCode"
-                    placeholder="Enter referral code if you have one" autocomplete="off">
-                </div>
-
-                <label class="signup-terms">
-                  <input type="checkbox" name="termsAccepted" value="true" required>
-                  <span>
-                    I agree to the
-                    <a href="/terms">Terms & Conditions</a>
-                    and
-                    <a href="/privacy">Privacy Policy</a>.
-                  </span>
-                </label>
-
-                <button type="submit" class="signup-submit">
-                  CREATE ACCOUNT <span>→</span>
-                </button>
-
-              </form>
-
-              <div class="signup-divider">OR CONTINUE WITH</div>
-
-              <a href="/auth/google" class="google-login">
-                <strong>G</strong>
-                Continue with Google
-              </a>
-
-              <p class="signup-login-prompt">
-                Already have an account?
-                <a href="/login">Login</a>
-              </p>
-
-              <div class="auth-security">
-                <span>♢ Zero Spam Policy</span>
-                <span>•</span>
-                <span>♙ Encrypted Credentials</span>
+              <div class="password-rules">
+                <p id="length">✗ At least 8 characters</p>
+                <p id="uppercase">✗ One uppercase letter (A-Z)</p>
+                <p id="lowercase">✗ One lowercase letter (a-z)</p>
+                <p id="number">✗ One number (0-9)</p>
+                <p id="special">✗ One special character (@#$!)</p>
               </div>
 
+            </div>
+
+            <div class="signup-field">
+
+              <label for="confirmPassword">
+                CONFIRM PASSWORD <span>*</span>
+              </label>
+
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Re-enter password"
+                autocomplete="new-password"
+              >
+
+            </div>
+
+          </div>
+
+          <div class="signup-password-hint">
+            <span>✓ 8+ characters</span>
+            <span>✓ 1 number</span>
+            <span>✓ 1 special symbol</span>
+          </div>
+
+          <!-- REFERRAL CODE -->
+          <div class="signup-field">
+
+            <label for="referralCode">
+              REFERRAL CODE
+              <span class="referral-optional">(OPTIONAL)</span>
+            </label>
+
+            <input
+              type="text"
+              id="referralCode"
+              name="referralCode"
+              placeholder="Enter referral code if you have one"
+              autocomplete="off"
+            >
+
+          </div>
+
+          <!-- TERMS -->
+          <label class="signup-terms">
+
+            <input
+              type="checkbox"
+              id="termsAccepted"
+              name="termsAccepted"
+              value="true"
+            >
+
+            <span>
+              I agree to the
+              <a href="/terms">Terms & Conditions</a>
+              and
+              <a href="/privacy">Privacy Policy</a>.
+            </span>
+
+          </label>
+
+          <!-- SUBMIT -->
+          <button type="submit" class="signup-submit">
+            CREATE ACCOUNT <span>→</span>
+          </button>
+
+        </form>
+
+        <!-- GOOGLE SIGNUP -->
+        <div class="signup-divider">OR CONTINUE WITH</div>
+
+        <a href="/auth/google" class="google-login">
+          <strong>G</strong>
+          Continue with Google
+        </a>
+
+        <p class="signup-login-prompt">
+          Already have an account?
+          <a href="/login">Login</a>
+        </p>
+
+        <div class="auth-security">
+          <span>♢ Zero Spam Policy</span>
+          <span>•</span>
+          <span>♙ Encrypted Credentials</span>
         </div>
 
       </div>
 
-    </section>
+    </div>
 
-    <!-- Bottom footer -->
-    <footer class="signup-footer">
-      <span>NORIX &nbsp; | &nbsp; Precision Esports Hardware & Battlestation Gear</span>
+  </section>
 
-      <div>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms of Service</a>
-        <a href="/security">Security Audit</a>
-        <span>© 2026 NORIX. All rights reserved.</span>
-      </div>
-    </footer>
+  <!-- FOOTER -->
+  <footer class="signup-footer">
 
-  </main>
+    <span>
+      NORIX &nbsp; | &nbsp; Precision Esports Hardware & Battlestation Gear
+    </span>
+
+    <div>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/security">Security Audit</a>
+      <span>© 2026 NORIX. All rights reserved.</span>
+    </div>
+
+  </footer>
+
+</main>
+
+<!-- CUSTOM NORIX POPUP -->
+<div
+  class="edit-popup-overlay"
+  id="signupPopup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="signupPopupTitle"
+  style="display: none;"
+  data-server-error="<%= typeof error !== 'undefined' && error ? error : '' %>"
+>
+
+  <div class="edit-popup">
+
+    <div class="edit-popup-icon">!</div>
+
+    <h3 id="signupPopupTitle">Validation Error</h3>
+
+    <p id="signupPopupMessage"></p>
+
+    <button type="button" id="signupPopupClose">
+      OK
+    </button>
+
+  </div>
+
+</div>
+
+<style>
+
+/* CUSTOM NORIX POPUP */
+
+.edit-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 99999;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.edit-popup {
+  background: #fff;
+  width: 100%;
+  max-width: 430px;
+  padding: 34px 30px;
+  border-radius: 11px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.edit-popup-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff0f0;
+  color: #d62828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0 auto 20px;
+}
+
+.edit-popup h3 {
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.edit-popup p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.edit-popup button {
+  margin-top: 24px;
+  padding: 13px 40px;
+  border: none;
+  border-radius: 5px;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-popup button:hover {
+  background: #444;
+}
+
+/* PASSWORD RULES */
+
+.password-rules p {
+  font-size: 11px;
+  margin: 5px 0;
+  color: #d62828;
+}
+
+/* INVALID FIELD */
+
+.signup-field input.input-error {
+  border-color: #d62828 !important;
+}
+
+/* MOBILE POPUP */
+
+@media (max-width: 480px) {
+  .edit-popup {
+    padding: 28px 20px;
+  }
+}
+
+</style>
+
+<script>
+
+// ==================================
+// NORIX CUSTOM POPUP
+// ==================================
+
+const signupPopup = document.getElementById('signupPopup');
+const signupPopupTitle = document.getElementById('signupPopupTitle');
+const signupPopupMessage = document.getElementById('signupPopupMessage');
+const signupPopupClose = document.getElementById('signupPopupClose');
+
+function showSignupPopup(title, message) {
+
+  signupPopupTitle.textContent = title;
+  signupPopupMessage.textContent = message;
+
+  signupPopup.style.display = 'flex';
+
+  signupPopupClose.focus();
+
+}
+
+function closeSignupPopup() {
+
+  signupPopup.style.display = 'none';
+
+}
+
+signupPopupClose.addEventListener('click', closeSignupPopup);
+
+signupPopup.addEventListener('click', (event) => {
+
+  if (event.target === signupPopup) {
+    closeSignupPopup();
+  }
+
+});
+
+document.addEventListener('keydown', (event) => {
+
+  if (event.key === 'Escape' && signupPopup.style.display === 'flex') {
+    closeSignupPopup();
+  }
+
+});
 
 
-  <script>
-  const passwordInput = document.getElementById('password');
+// ==================================
+// SERVER ERROR POPUP
+// ==================================
 
-  const rules = {
-    length: value => value.length >= 8,
-    uppercase: value => /[A-Z]/.test(value),
-    lowercase: value => /[a-z]/.test(value),
-    number: value => /[0-9]/.test(value),
-    special: value => /[^A-Za-z0-9]/.test(value)
-  };
+const serverError = signupPopup.dataset.serverError;
 
-  passwordInput.addEventListener('input', () => {
-    const value = passwordInput.value;
+if (serverError) {
 
-    Object.entries(rules).forEach(([id, check]) => {
-      const element = document.getElementById(id);
-      const valid = check(value);
+  showSignupPopup('Signup Failed', serverError);
 
-      element.textContent =
-        `${valid ? '✓' : '✗'} ${element.textContent.slice(2)}`;
+}
 
-      element.style.color = valid ? 'green' : 'red';
-    });
+
+// ==================================
+// PASSWORD VALIDATION RULES
+// ==================================
+
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirmPassword');
+
+const rules = {
+
+  length: value => value.length >= 8,
+
+  uppercase: value => /[A-Z]/.test(value),
+
+  lowercase: value => /[a-z]/.test(value),
+
+  number: value => /[0-9]/.test(value),
+
+  special: value => /[^A-Za-z0-9]/.test(value)
+
+};
+
+passwordInput.addEventListener('input', () => {
+
+  const value = passwordInput.value;
+
+  Object.entries(rules).forEach(([id, check]) => {
+
+    const element = document.getElementById(id);
+
+    const valid = check(value);
+
+    const originalText = element.textContent.slice(2);
+
+    element.textContent = `${valid ? '✓' : '✗'} ${originalText}`;
+
+    element.style.color = valid ? 'green' : 'red';
+
   });
-</script>
-  </body>
 
-  </html>
+});
+
+
+// ==================================
+// SIGNUP FORM VALIDATION
+// ==================================
+
+const signupForm = document.getElementById('signupForm');
+
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const termsInput = document.getElementById('termsAccepted');
+
+function clearFieldErrors() {
+
+  document.querySelectorAll('.signup-field input').forEach(input => {
+    input.classList.remove('input-error');
+  });
+
+}
+
+function showFieldError(field, title, message) {
+
+  field.classList.add('input-error');
+
+  showSignupPopup(title, message);
+
+  field.focus();
+
+}
+
+signupForm.addEventListener('submit', (event) => {
+
+  event.preventDefault();
+
+  clearFieldErrors();
+
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
+
+  // NAME VALIDATION
+
+  if (!name) {
+
+    showFieldError(
+      nameInput,
+      'Missing Information',
+      'Please enter your full name.'
+    );
+
+    return;
+
+  }
+
+  if (!/^[A-Za-z][A-Za-z\s'-]{2,}$/.test(name)) {
+
+    showFieldError(
+      nameInput,
+      'Invalid Name',
+      'Please enter a valid full name with at least 3 characters.'
+    );
+
+    return;
+
+  }
+
+  // EMAIL VALIDATION
+
+  if (!email) {
+
+    showFieldError(
+      emailInput,
+      'Missing Information',
+      'Please enter your email address.'
+    );
+
+    return;
+
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailPattern.test(email)) {
+
+    showFieldError(
+      emailInput,
+      'Invalid Email',
+      'Please enter a valid email address.'
+    );
+
+    return;
+
+  }
+
+  // PASSWORD REQUIRED
+
+  if (!password) {
+
+    showFieldError(
+      passwordInput,
+      'Missing Password',
+      'Please create a password.'
+    );
+
+    return;
+
+  }
+
+  // PASSWORD STRENGTH
+
+  for (const [id, check] of Object.entries(rules)) {
+
+    if (!check(password)) {
+
+      showFieldError(
+        passwordInput,
+        'Weak Password',
+        'Your password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.'
+      );
+
+      return;
+
+    }
+
+  }
+
+  // CONFIRM PASSWORD
+
+  if (!confirmPassword) {
+
+    showFieldError(
+      confirmPasswordInput,
+      'Missing Information',
+      'Please confirm your password.'
+    );
+
+    return;
+
+  }
+
+  if (password !== confirmPassword) {
+
+    showFieldError(
+      confirmPasswordInput,
+      'Password Mismatch',
+      'Your password and confirmation password do not match.'
+    );
+
+    return;
+
+  }
+
+  // TERMS VALIDATION
+
+  if (!termsInput.checked) {
+
+    showSignupPopup(
+      'Terms Required',
+      'Please accept the Terms & Conditions and Privacy Policy to continue.'
+    );
+
+    termsInput.focus();
+
+    return;
+
+  }
+
+  // ALL VALIDATIONS PASSED
+
+  HTMLFormElement.prototype.submit.call(signupForm);
+
+});
+
+</script>
+
+<%- include('../partials/footer') %>
+
+</body>
+</html>

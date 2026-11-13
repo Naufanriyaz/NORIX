@@ -117,14 +117,22 @@
 
         </div>
 
+        <!-- PROFILE ACTION BUTTONS -->
         <div class="profile-actions">
 
-          <a href="/profile/edit" class="profile-edit-btn">
-            ✎ EDIT PROFILE
+          <a href="/profile/edit" class="profile-action-btn profile-edit-btn">
+            <span>✎</span>
+            EDIT PROFILE
           </a>
 
-          <a href="/change-password" class="profile-password-btn">
-            ▤ CHANGE PASSWORD
+          <a href="/profile/update-email" class="profile-action-btn profile-email-btn">
+            <span>✉</span>
+            UPDATE EMAIL
+          </a>
+
+          <a href="/change-password" class="profile-action-btn profile-password-btn">
+            <span>▤</span>
+            CHANGE PASSWORD
           </a>
 
         </div>
@@ -252,6 +260,80 @@
 </div>
 
 <style>
+
+  /* PROFILE ACTION BUTTONS */
+
+  .profile-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+  }
+
+  .profile-action-btn {
+    width: 185px;
+    height: 54px;
+    padding: 0 12px;
+    box-sizing: border-box;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  /* EDIT PROFILE */
+
+  .profile-edit-btn {
+    background: #ff6900;
+    color: #fff;
+    border: 1px solid #ff6900;
+  }
+
+  .profile-edit-btn:hover {
+    background: #e85e00;
+    border-color: #e85e00;
+  }
+
+  /* UPDATE EMAIL */
+
+  .profile-email-btn {
+    background: #f1f1f1;
+    color: #222;
+    border: 1px solid #ddd;
+  }
+
+  .profile-email-btn:hover {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+  }
+
+  /* CHANGE PASSWORD */
+
+  .profile-password-btn {
+    background: #f1f1f1;
+    color: #222;
+    border: 1px solid #ddd;
+  }
+
+  .profile-password-btn:hover {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+  }
+
   /* CUSTOM POPUP */
 
   .edit-popup-overlay {
@@ -308,16 +390,37 @@
     color: #fff;
     cursor: pointer;
   }
+
+  /* MOBILE RESPONSIVE */
+
+  @media (max-width: 650px) {
+
+    .profile-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .profile-action-btn {
+      width: 100%;
+      height: 52px;
+    }
+
+  }
+
 </style>
 
 <script>
+
   // CUSTOM POPUP ELEMENTS
+
   const editPopup = document.getElementById('editPopup');
   const popupTitle = document.getElementById('editPopupTitle');
   const popupMessage = document.getElementById('editPopupMessage');
   const popupClose = document.getElementById('editPopupClose');
 
   // SHOW POPUP
+
   function showPopup(title, message) {
     popupTitle.textContent = title;
     popupMessage.textContent = message;
@@ -326,10 +429,10 @@
   }
 
   // CLOSE POPUP
+
   function closePopup() {
     editPopup.style.display = 'none';
 
-    // Remove uploadError from URL
     window.history.replaceState(
       {},
       document.title,
@@ -340,6 +443,7 @@
   popupClose.addEventListener('click', closePopup);
 
   // CLOSE WHEN CLICKING OUTSIDE
+
   editPopup.addEventListener('click', (event) => {
     if (event.target === editPopup) {
       closePopup();
@@ -347,6 +451,7 @@
   });
 
   // CLOSE WITH ESCAPE KEY
+
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && editPopup.style.display === 'flex') {
       closePopup();
@@ -354,6 +459,7 @@
   });
 
   // BACKEND UPLOAD ERROR
+
   const uploadError = <%- JSON.stringify(
     typeof uploadError !== 'undefined' ? uploadError : null
   ).replace(/</g, '\\u003c') %>;
@@ -361,6 +467,7 @@
   if (uploadError) {
     showPopup('Profile Upload Error', uploadError);
   }
+
 </script>
 
 <%- include('../partials/footer') %>
