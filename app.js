@@ -6,6 +6,7 @@ const path = require('path');
 const session = require('express-session');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const User = require('./models/User');
 const { requireAuth, guestOnly } = require('./middlewares/auth');
 const passport = require('passport');
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/', userRoutes);
+app.use('/admin', adminRoutes);
 
 
 // Home page

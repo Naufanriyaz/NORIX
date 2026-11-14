@@ -623,11 +623,11 @@ const uploadProfileImage = async (req, res) => {
 
 
 
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check required fields
     if (!email || !password) {
       return res.status(400).render('user/login', {
         error: 'Email and password are required'
@@ -636,9 +636,9 @@ const login = async (req, res) => {
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    // Find user
     const user = await User.findOne({
-      email: normalizedEmail
+      email: normalizedEmail,
+      role: 'user'
     });
 
     if (!user) {
@@ -647,7 +647,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Google account has no local password
     if (!user.password) {
       return res.render('user/login', {
         title: 'Login | NORIX',
@@ -655,43 +654,47 @@ const login = async (req, res) => {
       });
     }
 
-    // Compare normal user password
     const isPasswordMatch = await bcrypt.compare(
       password,
       user.password
     );
 
     if (!isPasswordMatch) {
-      console.log(`Failed login attempt: ${normalizedEmail}`);
       return res.status(401).render('user/login', {
         error: 'Invalid email or password'
       });
     }
 
-    // Check email verification
     if (!user.isVerified) {
       return res.status(403).render('user/login', {
         error: 'Please verify your email before logging in'
       });
     }
 
-    // Check blocked account
     if (user.isBlocked) {
       return res.status(403).render('user/login', {
         error: 'Your account has been blocked'
       });
     }
 
-    // Regenerate session to prevent session fixation
+    // Preserve admin identity before regenerating session
+    const adminId = req.session.adminId;
+
     req.session.regenerate((err) => {
       if (err) {
         console.error('Session error:', err);
         return res.status(500).send('Unable to create session');
       }
 
+      // Restore admin identity
+      if (adminId) {
+        req.session.adminId = adminId;
+      }
+
+      // Set customer identity
       req.session.userId = user._id.toString();
 
-      return req.session.save((err) => {
+      req.session.save((err) => {
         if (err) {
           console.error('Session save error:', err);
           return res.status(500).send('Unable to save session');
@@ -711,17 +714,22 @@ const login = async (req, res) => {
 };
 
 
+
+
 const logout = (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Logout error:', err);
+  // Remove only customer identity
+  delete req.session.userId;
+
+  req.session.save((error) => {
+    if (error) {
+      console.error('Customer logout error:', error);
       return res.status(500).send('Unable to logout');
     }
 
-    res.clearCookie('connect.sid');
     return res.redirect('/login');
   });
 };
+
 
 const changePassword = async (req, res) => {
   try {

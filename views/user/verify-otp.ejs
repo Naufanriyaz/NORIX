@@ -315,10 +315,10 @@
   const popupMessage = document.getElementById('otpPopupMessage');
   const popupClose = document.getElementById('otpPopupClose');
 
-  const status = <%- JSON.stringify(status || '') %>;
-  const otpLocked = <%- JSON.stringify(!!otpLocked) %>;
+const status = <%- JSON.stringify(status || '').replace(/</g, '\\u003c') %>;
+const otpLocked = <%- JSON.stringify(!!otpLocked) %>;
+const expiryValue = <%- JSON.stringify(otpExpiry ? otpExpiry.toISOString() : null) %>;
 
-  const expiryValue = <%- JSON.stringify(otpExpiry ? otpExpiry.toISOString() : null) %>;
 
   function showPopup(title, message) {
     popupTitle.textContent = title;

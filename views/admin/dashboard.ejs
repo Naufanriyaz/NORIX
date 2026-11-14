@@ -1,0 +1,803 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f3f2;
+      color: #292929;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: #fff;
+      border-right: 1px solid #eee;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+      overflow-y: auto;
+    }
+
+    .logo {
+      padding: 22px 18px;
+      font-size: 20px;
+      font-weight: 800;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo span {
+      color: #ff6900;
+    }
+
+    .nav-links {
+      padding: 15px 8px;
+    }
+
+    .nav-links a,
+    .signout {
+      display: block;
+      text-decoration: none;
+      color: #555;
+      padding: 12px;
+      font-size: 13px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+    }
+
+    .nav-links a.active,
+    .nav-links a:hover {
+      background: #ff6900;
+      color: white;
+    }
+
+    .signout {
+      margin-top: auto;
+      border-top: 1px solid #eee;
+      border-radius: 0;
+    }
+
+    .main {
+      margin-left: 200px;
+      width: calc(100% - 200px);
+      min-width: 0;
+    }
+
+    .content,
+    .chart-card,
+    .recent-orders {
+      min-width: 0;
+    }
+
+    .recent-orders {
+      overflow-x: auto;
+    }
+
+    .recent-orders table {
+      min-width: 600px;
+    }
+
+    .sidebar-logout-form {
+      width: 100%;
+      margin-top: auto;
+      padding: 12px 8px;
+      border-top: 1px solid #eee;
+    }
+
+    .sidebar-logout {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      border: none;
+      border-radius: 5px;
+      color: #555;
+      font-family: inherit;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-logout:hover {
+      background: #fff0e6;
+      color: #ff6900;
+    }
+
+    .topbar {
+      height: 65px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .search {
+      width: 300px;
+      padding: 11px;
+      border: none;
+      background: #f5f4f3;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .admin-info {
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .admin-info strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .content {
+      padding: 25px;
+    }
+
+    .page-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      font-size: 25px;
+    }
+
+    .page-heading p {
+      color: #888;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .date {
+      font-size: 11px;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 7px;
+      border: 1px solid #eee;
+    }
+
+    .stat-card p {
+      color: #888;
+      font-size: 11px;
+    }
+
+    .stat-card h2 {
+      font-size: 23px;
+      margin: 14px 0 8px;
+    }
+
+    .stat-card small {
+      color: #16a36a;
+      font-size: 10px;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .chart-card,
+    .recent-orders {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 7px;
+      padding: 20px;
+    }
+
+    .chart-card h3,
+    .recent-orders h3 {
+      font-size: 15px;
+      margin-bottom: 18px;
+    }
+
+    .chart-container {
+      height: 280px;
+      position: relative;
+    }
+
+    .side-charts {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .side-chart {
+      height: 165px;
+      position: relative;
+    }
+
+    .orders-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .orders-header a {
+      color: #ff6900;
+      font-size: 11px;
+      text-decoration: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 13px 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      color: #888;
+      font-size: 10px;
+      background: #fafafa;
+    }
+
+    .status {
+      padding: 5px 9px;
+      border-radius: 15px;
+      background: #fff0e5;
+      color: #bd5700;
+    }
+
+    @media (max-width: 1000px) {
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .charts {
+        grid-template-columns: 1fr;
+      }
+
+      .side-charts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 650px) {
+      .sidebar {
+        width: 145px;
+      }
+
+      .logo {
+        font-size: 16px;
+        padding: 18px 12px;
+      }
+
+      .nav-links {
+        padding: 10px 7px;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 10px 8px;
+        font-size: 11px;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+
+      .sidebar-logout-form {
+        padding: 8px 7px;
+      }
+
+      .sidebar-logout {
+        padding: 10px 8px;
+        gap: 7px;
+        font-size: 11px;
+      }
+
+      .main {
+        margin-left: 145px;
+        width: calc(100% - 145px);
+      }
+
+      .topbar {
+        min-height: 65px;
+        height: auto;
+        gap: 8px;
+        padding: 10px;
+      }
+
+      .search {
+        width: min(52%, 210px);
+        min-width: 0;
+        font-size: 11px;
+      }
+
+      .admin-info {
+        min-width: 0;
+        font-size: 10px;
+        overflow-wrap: anywhere;
+      }
+
+      .content {
+        padding: 12px;
+      }
+
+      .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .page-heading h1 {
+        font-size: 22px;
+      }
+
+      .page-heading p {
+        line-height: 1.5;
+      }
+
+      .date {
+        max-width: 100%;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 15px;
+      }
+
+      .stat-card h2 {
+        font-size: 21px;
+      }
+
+      .charts,
+      .side-charts {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-card,
+      .recent-orders {
+        padding: 14px;
+      }
+
+      .chart-container {
+        height: 230px;
+      }
+
+      .side-chart {
+        height: 190px;
+      }
+
+      .orders-header {
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .sidebar {
+        width: 125px;
+      }
+
+      .main {
+        margin-left: 125px;
+        width: calc(100% - 125px);
+      }
+
+      .nav-links a {
+        font-size: 10px;
+        padding: 9px 6px;
+      }
+
+      .admin-info span {
+        max-width: 110px;
+        display: inline-block;
+      }
+
+      .chart-container {
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="logo">NORIX <span>●</span></div>
+
+    <nav class="nav-links">
+      <a href="/admin/dashboard" class="active">▦ Dashboard</a>
+      <a href="#">▣ Products</a>
+      <a href="#">▤ Orders</a>
+      <a href="/admin/users">♙ Users</a>
+      <a href="#">▧ Categories</a>
+      <a href="#">▤ Coupons</a>
+      <a href="#">⚑ Banners</a>
+      <a href="#">▥ Sales Report</a>
+      <a href="#">◇ Offers</a>
+      <a href="#">⚙ Settings</a>
+    </nav>
+
+   <form action="/admin/logout" method="POST" class="sidebar-logout-form">
+  <button type="submit" class="sidebar-logout">
+    <span>⇥</span> Sign Out
+  </button>
+</form>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <input
+        type="search"
+        class="search"
+        placeholder="⌕ Search admins, orders, SKUs..."
+      >
+
+      <div class="admin-info">
+        <strong>Superadmin</strong>
+        <span><%= admin.email %></span>
+      </div>
+    </header>
+
+    <section class="content">
+
+      <div class="page-heading">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Overview of NORIX e-commerce performance and store activities</p>
+        </div>
+        <div class="date">📅 Dashboard Overview</div>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <p>Total Sales</p>
+          <h2>₹18,45,290</h2>
+          <small>+12.4% vs last month</small>
+        </div>
+
+        <div class="stat-card">
+          <p>Total Orders</p>
+          <h2>1,248</h2>
+          <small>+8.2% vs last month</small>
+        </div>
+
+        <div class="stat-card">
+          <p>Total Products</p>
+          <h2>90</h2>
+          <small>Across 8 categories</small>
+        </div>
+
+        <div class="stat-card">
+          <p>Total Users</p>
+          <h2>3,420</h2>
+          <small>+24% new customers</small>
+        </div>
+
+      </section>
+
+      <section class="charts">
+
+        <div class="chart-card">
+          <h3>Revenue Overview</h3>
+          <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </div>
+
+        <div class="side-charts">
+
+          <div class="chart-card">
+            <h3>Top Categories</h3>
+            <div class="side-chart">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3>Sales Distribution</h3>
+            <div class="side-chart">
+              <canvas id="salesChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="recent-orders">
+
+        <div class="orders-header">
+          <h3>Recent Orders</h3>
+          <a href="#">View all transactions →</a>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ORDER ID</th>
+              <th>CUSTOMER</th>
+              <th>PRODUCT</th>
+              <th>AMOUNT</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>#NOR-9821</td>
+              <td>Arjun Verma</td>
+              <td>Gaming Mouse</td>
+              <td>₹7,499</td>
+              <td><span class="status">Completed</span></td>
+            </tr>
+
+            <tr>
+              <td>#NOR-9820</td>
+              <td>Priya Sundaram</td>
+              <td>Mechanical Keyboard</td>
+              <td>₹14,990</td>
+              <td><span class="status">Processing</span></td>
+            </tr>
+
+            <tr>
+              <td>#NOR-9819</td>
+              <td>Vikram</td>
+              <td>Gaming Monitor</td>
+              <td>₹24,999</td>
+              <td><span class="status">Completed</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </section>
+
+    </section>
+  </main>
+</div>
+
+<script>
+  // Revenue line graph
+  const revenueContext = document
+    .getElementById('revenueChart')
+    .getContext('2d');
+
+  const revenueGradient = revenueContext.createLinearGradient(0, 0, 0, 280);
+  revenueGradient.addColorStop(0, 'rgba(255, 105, 0, 0.25)');
+  revenueGradient.addColorStop(1, 'rgba(255, 105, 0, 0.01)');
+
+  new Chart(revenueContext, {
+    type: 'line',
+
+    data: {
+      labels: [
+        'Mon', 'Tue', 'Wed', 'Thu',
+        'Fri', 'Sat', 'Sun'
+      ],
+
+      datasets: [{
+        label: 'Revenue',
+        data: [12000, 18000, 15000, 24000, 31000, 42000, 19000],
+
+        borderColor: '#ff6900',
+        backgroundColor: revenueGradient,
+
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#ff6900',
+        pointBorderWidth: 3
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
+
+      plugins: {
+        legend: {
+          display: false
+        },
+
+        tooltip: {
+          backgroundColor: '#252525',
+          padding: 12,
+          callbacks: {
+            label: function(context) {
+              return 'Revenue: ₹' +
+                context.parsed.y.toLocaleString('en-IN');
+            }
+          }
+        }
+      },
+
+      scales: {
+        y: {
+          beginAtZero: true,
+
+          ticks: {
+            callback: function(value) {
+              return '₹' + (value / 1000) + 'k';
+            },
+            font: {
+              size: 10
+            }
+          },
+
+          grid: {
+            color: '#f0eeee'
+          },
+
+          border: {
+            display: false
+          }
+        },
+
+        x: {
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            font: {
+              size: 11
+            }
+          },
+
+          border: {
+            display: false
+          }
+        }
+      }
+    }
+  });
+
+  // Category doughnut chart
+  new Chart(document.getElementById('categoryChart'), {
+    type: 'doughnut',
+
+    data: {
+      labels: [
+        'Gaming Mice',
+        'Keyboards',
+        'Monitors',
+        'Headsets',
+        'Others'
+      ],
+
+      datasets: [{
+        data: [35, 24, 18, 12, 11],
+
+        backgroundColor: [
+          '#ff6900',
+          '#ff9b52',
+          '#ffc18f',
+          '#e7a36d',
+          '#e9e5e2'
+        ],
+
+        borderWidth: 0
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            boxWidth: 9,
+            font: {
+              size: 9
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Sales distribution chart
+  new Chart(document.getElementById('salesChart'), {
+    type: 'pie',
+
+    data: {
+      labels: [
+        'NORIX',
+        'Razer',
+        'Logitech',
+        'HyperX'
+      ],
+
+      datasets: [{
+        data: [42, 28, 18, 12],
+
+        backgroundColor: [
+          '#ff6900',
+          '#f6a36d',
+          '#c8c1bc',
+          '#e9e5e2'
+        ],
+
+        borderWidth: 0
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            boxWidth: 9,
+            font: {
+              size: 9
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
