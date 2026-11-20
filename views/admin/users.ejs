@@ -799,8 +799,8 @@
       <a href="#">⚙ Settings</a>
     </nav>
 
-   <form action="/admin/logout" method="POST" class="sidebar-logout-form">
-  <button type="submit" class="signout">
+   <form action="/admin/logout" method="POST" class="sidebar-logout-form" id="usersLogoutForm">
+  <button type="button" class="signout" id="openUsersLogoutModal">
     <span>⇥</span> Sign Out
   </button>
 </form>
@@ -1148,7 +1148,82 @@
 
   </div>
 
+  <!-- ADMIN LOGOUT CONFIRMATION MODAL -->
+
+  <div class="modal-overlay" id="usersLogoutModal">
+    <div
+      class="confirm-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="usersLogoutTitle"
+      aria-describedby="usersLogoutMessage">
+
+      <div class="modal-icon">!</div>
+
+      <h2 id="usersLogoutTitle">Sign Out?</h2>
+
+      <p id="usersLogoutMessage">
+        Are you sure you want to sign out of the admin panel?
+      </p>
+
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn" id="cancelUsersLogout">
+          Cancel
+        </button>
+
+        <button type="button" class="confirm-block-btn" id="confirmUsersLogout">
+          Yes, Sign Out
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
+
+    // ADMIN LOGOUT CONFIRMATION POPUP
+
+    const usersLogoutModal = document.getElementById('usersLogoutModal');
+    const usersLogoutForm = document.getElementById('usersLogoutForm');
+    const openUsersLogoutModal = document.getElementById('openUsersLogoutModal');
+    const cancelUsersLogout = document.getElementById('cancelUsersLogout');
+    const confirmUsersLogout = document.getElementById('confirmUsersLogout');
+
+    function openUsersLogoutPopup() {
+      usersLogoutModal.classList.add('show');
+      document.body.classList.add('modal-open');
+      cancelUsersLogout.focus();
+    }
+
+    function closeUsersLogoutPopup() {
+      usersLogoutModal.classList.remove('show');
+      document.body.classList.remove('modal-open');
+      openUsersLogoutModal.focus();
+    }
+
+    openUsersLogoutModal.addEventListener('click', openUsersLogoutPopup);
+    cancelUsersLogout.addEventListener('click', closeUsersLogoutPopup);
+
+    usersLogoutModal.addEventListener('click', function(event) {
+      if (event.target === usersLogoutModal) {
+        closeUsersLogoutPopup();
+      }
+    });
+
+    confirmUsersLogout.addEventListener('click', function() {
+      confirmUsersLogout.disabled = true;
+      confirmUsersLogout.textContent = 'Signing Out...';
+      usersLogoutForm.submit();
+    });
+
+    document.addEventListener('keydown', function(event) {
+      if (
+        event.key === 'Escape' &&
+        usersLogoutModal.classList.contains('show')
+      ) {
+        closeUsersLogoutPopup();
+      }
+    });
+
 
     // VIEW USER DETAILS
 

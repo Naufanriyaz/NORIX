@@ -31,6 +31,9 @@ const {
 
 
 
+
+
+
 const handleProfileImageUpload = (req, res, next) => {
   profileImageUpload.single('profileImage')(req, res, (error) => {
     if (error) {
@@ -233,16 +236,9 @@ router.get('/addresses/:id/edit', requireAuth, async (req, res) => {
   }
 });
 
+
+
 // Google Signup / Login
-router.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email']
-  })
-);
-
-// Google OAuth Callback
-
 router.get(
   '/auth/google',
   passport.authenticate('google', {
@@ -258,8 +254,6 @@ router.get(
     failureRedirect: '/login?error=google'
   }),
   (req, res, next) => {
-
-    // Reject blocked accounts
     if (!req.user || req.user.isBlocked) {
       return res.redirect('/login?error=blocked');
     }
@@ -267,19 +261,16 @@ router.get(
     // Preserve admin session
     const adminId = req.session.adminId;
 
-    // Regenerate session for security
     req.session.regenerate((error) => {
       if (error) {
         console.error('Google session error:', error);
         return next(error);
       }
 
-      // Restore admin identity
       if (adminId) {
         req.session.adminId = adminId;
       }
 
-      // Set customer identity
       req.session.userId = req.user._id.toString();
 
       req.session.save((error) => {
@@ -351,6 +342,8 @@ router.get('/profile/update-email', requireAuth, async (req, res) => {
     return res.status(500).send('Unable to load update email page');
   }
 });
+
+
 
 
 module.exports = router;

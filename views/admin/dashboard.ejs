@@ -287,6 +287,112 @@
       color: #bd5700;
     }
 
+    /* ADMIN LOGOUT CONFIRMATION POPUP */
+
+    .admin-logout-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .admin-logout-modal {
+      width: 100%;
+      max-width: 390px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 32px 25px;
+      text-align: center;
+      animation: adminLogoutAppear 0.2s ease;
+    }
+
+    .admin-logout-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 17px;
+      border-radius: 50%;
+      background: #fff0e5;
+      color: #ff6900;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .admin-logout-modal h3 {
+      color: #222;
+      font-size: 19px;
+      margin-bottom: 12px;
+    }
+
+    .admin-logout-modal p {
+      color: #777;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .admin-logout-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .admin-logout-actions button {
+      min-width: 125px;
+      padding: 13px 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    #cancelAdminLogout {
+      background: #eee;
+      color: #333;
+    }
+
+    #cancelAdminLogout:hover {
+      background: #ddd;
+    }
+
+    #confirmAdminLogout {
+      background: #ff6900;
+      color: white;
+    }
+
+    #confirmAdminLogout:hover {
+      background: #e65e00;
+    }
+
+    @keyframes adminLogoutAppear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 450px) {
+      .admin-logout-actions {
+        flex-direction: column-reverse;
+      }
+
+      .admin-logout-actions button {
+        width: 100%;
+      }
+    }
+
     @media (max-width: 1000px) {
       .stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -464,11 +570,22 @@
       <a href="#">⚙ Settings</a>
     </nav>
 
-   <form action="/admin/logout" method="POST" class="sidebar-logout-form">
-  <button type="submit" class="sidebar-logout">
-    <span>⇥</span> Sign Out
-  </button>
-</form>
+    <!-- ADMIN LOGOUT FORM -->
+    <form
+      action="/admin/logout"
+      method="POST"
+      class="sidebar-logout-form"
+      id="adminLogoutForm"
+    >
+      <button
+        type="button"
+        class="sidebar-logout"
+        id="openAdminLogout"
+      >
+        <span>⇥</span> Sign Out
+      </button>
+    </form>
+
   </aside>
 
   <main class="main">
@@ -601,6 +718,40 @@
 
     </section>
   </main>
+</div>
+
+<!-- ADMIN LOGOUT CONFIRMATION POPUP -->
+<div
+  class="admin-logout-overlay"
+  id="adminLogoutPopup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="adminLogoutTitle"
+  style="display: none;"
+>
+  <div class="admin-logout-modal">
+
+    <div class="admin-logout-icon">⇥</div>
+
+    <h3 id="adminLogoutTitle">SIGN OUT?</h3>
+
+    <p>
+      Are you sure you want to sign out of your NORIX Admin account?
+    </p>
+
+    <div class="admin-logout-actions">
+
+      <button type="button" id="cancelAdminLogout">
+        CANCEL
+      </button>
+
+      <button type="button" id="confirmAdminLogout">
+        YES, SIGN OUT
+      </button>
+
+    </div>
+
+  </div>
 </div>
 
 <script>
@@ -797,6 +948,50 @@
       }
     }
   });
+
+  // ADMIN LOGOUT CONFIRMATION
+
+  const adminLogoutPopup = document.getElementById('adminLogoutPopup');
+  const openAdminLogout = document.getElementById('openAdminLogout');
+  const cancelAdminLogout = document.getElementById('cancelAdminLogout');
+  const confirmAdminLogout = document.getElementById('confirmAdminLogout');
+  const adminLogoutForm = document.getElementById('adminLogoutForm');
+
+  function openAdminLogoutConfirmation() {
+    adminLogoutPopup.style.display = 'flex';
+    cancelAdminLogout.focus();
+  }
+
+  function closeAdminLogoutConfirmation() {
+    adminLogoutPopup.style.display = 'none';
+    openAdminLogout.focus();
+  }
+
+  openAdminLogout.addEventListener('click', openAdminLogoutConfirmation);
+
+  cancelAdminLogout.addEventListener('click', closeAdminLogoutConfirmation);
+
+  confirmAdminLogout.addEventListener('click', () => {
+    adminLogoutForm.submit();
+  });
+
+  // Close when clicking outside the popup
+  adminLogoutPopup.addEventListener('click', (event) => {
+    if (event.target === adminLogoutPopup) {
+      closeAdminLogoutConfirmation();
+    }
+  });
+
+  // Close with Escape
+  document.addEventListener('keydown', (event) => {
+    if (
+      event.key === 'Escape' &&
+      adminLogoutPopup.style.display === 'flex'
+    ) {
+      closeAdminLogoutConfirmation();
+    }
+  });
+
 </script>
 
 </body>

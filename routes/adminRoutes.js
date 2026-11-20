@@ -6,7 +6,7 @@ const {
   adminLogin,
   adminLogout,
   getUsers,
-  toggleUserStatus
+  toggleUserStatus,
 } = require('../controllers/adminController');
 
 const { requireAdmin } = require('../middlewares/auth');
@@ -46,5 +46,6 @@ router.post(
   requireAdmin,
   toggleUserStatus
 );
+
 
 module.exports = router;

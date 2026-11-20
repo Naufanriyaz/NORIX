@@ -108,7 +108,7 @@ const getUsers = async (req, res) => {
 
     const users = await User.find(filter)
       .select('-password -otp')
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1    })
       .skip((currentPage - 1) * limit)
       .limit(limit);
 
@@ -168,9 +168,11 @@ const toggleUserStatus = async (req, res) => {
 };
 
 
+
+
 module.exports = {
   adminLogin,
   adminLogout,
   getUsers,
-  toggleUserStatus
+  toggleUserStatus,
 };
